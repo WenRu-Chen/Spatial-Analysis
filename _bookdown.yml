@@ -4,8 +4,8 @@ delete_merged_file: TURE
 output_dir: "docs"
 language:
   label:
-    fig: "图 "
+    fig: "圖 "
     tab: "表 "
   ui:
-    edit: "编辑"
+    edit: "編輯"
     chapter_name: ["第 ", " 章"]
