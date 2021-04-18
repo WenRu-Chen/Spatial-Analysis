@@ -1,0 +1,40 @@
+--- 
+title: "空間統計"
+author: "延畢菸酒生"
+date: "`r Sys.Date()`"
+documentclass: ctexbook
+bibliography: [book.bib, packages.bib]
+biblio-style: apalike
+link-citations: yes
+colorlinks: yes
+lot: yes
+lof: yes
+geometry: [b5paper, tmargin=2.5cm, bmargin=2.5cm, lmargin=3.5cm, rmargin=2.5cm]
+site: bookdown::bookdown_site
+description: "就是一點筆記。"
+github-repo: yihui/bookdown-chinese
+#cover-image: images/cover.jpg
+---
+
+```{r setup, include=FALSE}
+options(
+  htmltools.dir.version = FALSE, formatR.indent = 2, width = 55, digits = 4
+)
+
+
+# 填上你需要用到的包，如 c('ggplot2', 'dplyr')
+lapply(c(), function(pkg) {
+  if (system.file(package = pkg) == c('tidyverse', "")) install.packages(pkg)
+})
+```
+
+# 簡介 {-}
+
+《空間分析--方法與應用（Spatial Analysis Methods and Applications）》 （溫在弘 教授）的讀書筆記，再加上一點的Rcode。
+
+。
+
+```{block2, type='flushright', html.tag='p'}
+某個跨界菸酒生  
+```
+
