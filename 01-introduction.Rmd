@@ -1,19 +1,27 @@
 \mainmatter
 
-# 牛刀小试 {#intro}
+# 空間思考 {#intro}
 
-现在我们可以试试 **bookdown** 的一些初级功能了，例如图表。图 \@ref(fig:hello) 是一幅无趣的散点图，表 \@ref(tab:iris) 是一份枯燥的数据。
+## 地理資料模型
+### 地理資料模型（geographical data model）
+透過電腦來處理實體地理空間，主要分為兩類：
+
+- 向量資料（vector data）
+以點、線、面來處理地理資料。
+點：代表地標或者事件發生地點，如商店、學校、竊盜發生地點等等。
+線：據線性特徵的事物，如：水文、生物遷徙。
+面：獨立且分散，如行政邊界。
+
+- 網格資料（raster data）
+將空間分為許多大小相同的網格，然後在往格中紀錄資料，例如溫度、風速等等，需要的記憶體遠大於向量。
+
+
 
 ```{r hello, fig.cap='雷猴啊，散点图！', out.width='90%'}
-par(mar = c(4, 4, 1, .1))
-plot(cars, pch = 19)
+
 ```
 
 ```{r iris}
-knitr::kable(
-  head(iris), caption = '雷猴啊，iris 数据！',
-  booktabs = TRUE
-)
 ```
 
-就这样，你可以一直编下去，直到编不下去。
+
