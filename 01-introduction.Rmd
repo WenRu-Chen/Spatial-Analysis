@@ -2,8 +2,12 @@
 
 # 空間思考 {#intro}
 
-## 地理資料模型
-### 地理資料模型（geographical data model）
+## 實體地理空間
+
+### 地理資料模型
+
+#### 地理資料模型（geographical data model）
+
 透過電腦來處理實體地理空間，主要分為兩類：
 
 - 向量資料（vector data）
@@ -15,13 +19,63 @@
 - 網格資料（raster data）
 將空間分為許多大小相同的網格，然後在往格中紀錄資料，例如溫度、風速等等，需要的記憶體遠大於向量。
 
-
-
-```{r hello, fig.cap='雷猴啊，散点图！', out.width='90%'}
-
+```{r vector&raste, fig.cap='vector&raster', out.width='90%'}
+knitr::include_graphics("D:\\sptial_stat\\PROJECT\\bookdown-chinese-master\\bookdown-chinese-master\\fig\\Ch01\\vector&raster.PNG")
 ```
+圖案來自：Keep Environment Nature's Blog (https://blog.xuite.net/lwkntu/blog/507588534)
 
-```{r iris}
+
+#### 物件與場(object & field)
+
+除了客觀的資料，O'Sullivan 與 Unwin  於2010年提出應該加上物件(object)與場域(field)的觀點。
+
+- 物件
+將世界視為一個實體，不再只是一張地圖，大物件中可以含小物件，地如行政區中有學校與公園等等，其中又將物件賦予時間或行為的屬性，例如：南投線的人口流失變化。
+
+- 場域
+網格與向量兩個加起來的進階版，世界是一個連續的表面，存在著不同的數值。例如：海平面高度。而網格只是格子，但場域觀點下以三角形為單位，就是傳說中的「不規則三角形」（triangulated irregular network, TIN），其中包含不同大小與邊長的三角形，適合地理現象複雜的地方，用三角形的方式儲存資料可以減少儲存空間。
+
+```{r TIN , fig.cap='TIN不規則三角形示意圖', out.width='90%'}
+knitr::include_graphics("D:\\sptial_stat\\PROJECT\\bookdown-chinese-master\\bookdown-chinese-master\\fig\\Ch01\\TIN.PNG")
 ```
+圖片取自：https://www.osgeo.cn/post/15f1a
 
+但是不只這些，大家都可以發揮想像力去使用不同的地圖表現方式。
+
+
+### 屬性資料與測量尺度
+
+- 名目資料（nomial）
+- 次序資料（ordinal）
+- 區間資料（interval）
+- 比例資料（ratio）
+
+## 地理空間分析
+
+### 距離
+
+大部分都是使用歐式距離：
+$$
+d_{ij} = \sqrt{(x_i-x_j)^2+(y_i-y_j)^2}
+$$
+但是距離這方面還是會受到現實面的影響，例如：交通便利性、金錢等等。
+
+### 鄰近性
+
+以二元（0,1）的方式定義兩物之間的關係，定義其實可以隨人喜歡，可以以實際的距離（台北與桃園為鄰近，台北與高雄不為鄰近）；也可以以有無航線定義，例如松山與桃園機場沒有直飛，因此定義為不鄰近，但是曼谷與桃園有直飛，定義為鄰近（好想出國玩喔！）。
+
+以下有一些較經典（a.k.a 簡單）的定義方式：
+
+- Rook Contiguity:
+邊界，但是沒有斜對角（角角）。
+
+- Bishop Contiguity:
+對角線(角角)而已喔！
+
+- Queen Contiguity:
+Rook+Bishop
+```{r Rook,Bishop,Queen , fig.cap='Contiguity', out.width='90%'}
+knitr::include_graphics("D:\\sptial_stat\\PROJECT\\bookdown-chinese-master\\bookdown-chinese-master\\fig\\Ch01\\Contiguity.PNG")
+```
+圖片取自：https://spatiolog.blogspot.com/2019/01/contiguity-based-spatial-weights-matrix.html
 
