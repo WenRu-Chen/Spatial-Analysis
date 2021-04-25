@@ -1,7 +1,10 @@
 \mainmatter
 
 # 空間思考 {#intro}
-
+```{r  echo = F, include=F, message=F, warning=F}
+library(knitr)
+library(tidyverse)
+```
 ## 實體地理空間
 
 ### 地理資料模型
@@ -19,8 +22,8 @@
 - 網格資料（raster data）
 將空間分為許多大小相同的網格，然後在往格中紀錄資料，例如溫度、風速等等，需要的記憶體遠大於向量。
 
-```{r vector&raste, fig.cap='vector&raster', out.width='90%'}
-knitr::include_graphics("D:\\sptial_stat\\PROJECT\\bookdown-chinese-master\\bookdown-chinese-master\\fig\\Ch01\\vector&raster.PNG")
+```{r, echo=FALSE, vector&raste, fig.cap='vector&raster', out.width='90%'}
+knitr::include_graphics("fig\\Ch01\\vector&raster.PNG")
 ```
 圖案來自：Keep Environment Nature's Blog (https://blog.xuite.net/lwkntu/blog/507588534)
 
@@ -35,8 +38,8 @@ knitr::include_graphics("D:\\sptial_stat\\PROJECT\\bookdown-chinese-master\\book
 - 場域
 網格與向量兩個加起來的進階版，世界是一個連續的表面，存在著不同的數值。例如：海平面高度。而網格只是格子，但場域觀點下以三角形為單位，就是傳說中的「不規則三角形」（triangulated irregular network, TIN），其中包含不同大小與邊長的三角形，適合地理現象複雜的地方，用三角形的方式儲存資料可以減少儲存空間。
 
-```{r TIN , fig.cap='TIN不規則三角形示意圖', out.width='90%'}
-knitr::include_graphics("D:\\sptial_stat\\PROJECT\\bookdown-chinese-master\\bookdown-chinese-master\\fig\\Ch01\\TIN.PNG")
+```{r TIN ,echo=FALSE,fig.cap='TIN不規則三角形示意圖', out.width='90%'}
+knitr::include_graphics("fig\\Ch01\\TIN.PNG")
 ```
 圖片取自：https://www.osgeo.cn/post/15f1a
 
@@ -74,8 +77,195 @@ $$
 
 - Queen Contiguity:
 Rook+Bishop
-```{r Rook,Bishop,Queen , fig.cap='Contiguity', out.width='90%'}
-knitr::include_graphics("D:\\sptial_stat\\PROJECT\\bookdown-chinese-master\\bookdown-chinese-master\\fig\\Ch01\\Contiguity.PNG")
+```{r Rook,Bishop,Queen ,echo=FALSE, fig.cap='Contiguity', out.width='90%'}
+knitr::include_graphics("fig\\Ch01\\Contiguity.PNG")
 ```
 圖片取自：https://spatiolog.blogspot.com/2019/01/contiguity-based-spatial-weights-matrix.html
 
+### 矩陣
+
+#### 距離矩陣
+```{r Distance Plot, include=T, echo = F, message = FALSE,warning=F}
+x1=c(2,1); x2 = c(1,2); x3 = c(1.5,2.5);x4=c(3,3)
+x <- rbind(x1, x2, x3,x4) %>% as.data.frame()
+x <- tibble::add_column(x, X = c(1:4), .before = 1)
+ggplot(x)+geom_point(mapping = aes(x = V1, y = V2))+
+  ggrepel::geom_text_repel(aes(x = V1, y = V2,label = X), size = 6)
+```
+```{r Distance Matrix, include=T, echo = F, message = FALSE,warning=F}
+x1=c(2,1); x2 = c(1,2); x3 = c(1.5,2.5);x4=c(3,3)
+x <- rbind(x1, x2, x3,x4) %>% as.data.frame()
+
+D = data.frame()
+for (i in 1:4){
+  for (j in 1:4) {
+    D[i,j] = sqrt((x[i,1]-x[j,1])^2+(x[i,2]-x[j,2])^2) %>% round(2)
+    }
+}
+colnames(D) <- c(1:4)
+D %>% as.matrix()
+```
+D 為距離矩陣，例如：1到2的距離為`r D[1,2]`、1到3的距離為`r D[1,3]`、1到4的距離為`r D[1,4]`，該矩陣為**對稱矩陣**。
+
+#### 鄰近矩陣
+```{r 鄰近矩陣.01, include=T, echo = F, message = FALSE,warning=F}
+x1=c(2,1); x2 = c(1,2); x3 = c(1.5,2.5);x4=c(3,3)
+x <- rbind(x1, x2, x3,x4) %>% as.data.frame()
+
+A.1 = data.frame()
+
+for (i in 1:4){
+  for (j in 1:4){
+    d = sqrt((x[i,1]-x[j,1])^2+(x[i,2]-x[j,2])^2)
+    if(d>=2){
+      A.1[i,j] = 0
+    }else if(d == 0) {
+      A.1[i,j] = "*"
+    }else{
+      A.1[i,j] = 1
+    }
+              }
+}
+colnames(A.1) <- c(1:4)
+A.1
+```
+以上矩陣為距離2以內為鄰近，一樣為**對稱矩陣**
+
+
+#### 鄰近矩陣
+```{r 鄰近矩陣.02, include=T, echo = F, message = FALSE,warning=F}
+x1=c(2,1); x2 = c(1,2); x3 = c(2,2);x4=c(3,3)
+x <- rbind(x1, x2, x3,x4) %>% as.data.frame()
+
+A.2 = data.frame()
+
+for (i in 1:4){
+  for (j in 1:4){
+    d = D[i,] %>% max()
+    if(D[i,j]== d){
+      A.2[i,j] = 0
+    }else if(D[i,j] == 0) {
+      A.2[i,j] = "*"
+    }else{
+      A.2[i,j] = 1
+    }
+              }
+}
+colnames(A.2) <- c(1:4)
+A.2 
+```
+該鄰近矩陣表示，距離最近的2個點為鄰近，這個矩陣就不是對稱矩陣。
+
+#### 權重矩陣
+```{r Weight Matrix, include=T, echo = F, message = FALSE,warning=F}
+x1=c(2,1); x2 = c(1,2); x3 = c(1.5,2.5);x4=c(3,3)
+x <- rbind(x1, x2, x3,x4) %>% as.data.frame()
+
+W <-  data.frame()
+for (i in 1:4){
+  for (j in 1:4){
+    d <-  (sqrt((x[i,1]-x[j,1])^2+(x[i,2]-x[j,2])^2))
+    W[i,j] <-  (1/d) 
+  }
+}
+y <- vector()
+for (i in 1:4){
+  w <- W[i,-i] %>% as.numeric() %>% sum()
+  y[i] <- w
+}
+W[,5] <- y
+colnames(W) <- c(c(1:4), "列總和")
+W %>% as.matrix() %>% round(2)
+```
+權重矩陣為距離的倒數。
+
+調整後的**權重矩陣**
+```{r Weight Matrix.02, include=T, echo = F, message = FALSE,warning=F}
+x1=c(2,1); x2 = c(1,2); x3 = c(1.5,2.5);x4=c(3,3)
+x <- rbind(x1, x2, x3,x4) %>% as.data.frame()
+
+W <- W[,1:4]
+
+W.2 <-  data.frame()
+for (i in 1:4){
+  for (j in 1:4){
+    if(i == j){
+      W.2[i,j] <- Inf
+    }else{
+    w <- W[i,-i] %>% sum()
+    W.2[i,j] <-  (W[i,j]/w) %>% round(2)
+    }
+  }
+}
+y <- vector()
+for (i in 1:4){
+  w <- W.2[i,-i] %>% as.numeric() %>% sum()
+  y[i] <- w
+}
+W.2[,5] <- y
+colnames(W.2) <- c(c(1:4), "列總和")
+W.2 %>% as.matrix()
+```
+調整後的權重矩陣列總和為1。
+
+### 鄰近多邊形
+**鄰近多邊形(proximity polygons)** 通常稱之為**徐昇式多邊形(Thiessen polygons)**，利用中垂線的方式劃出多邊形，在多邊形內的每個點距離該物體的距離最近。
+
+```{r Thiessen polygones ,echo=FALSE, fig.cap='Contiguity', out.width='90%'}
+knitr::include_graphics("fig\\Ch01\\Thiessen polygones.PNG")
+```
+圖片取自：https://blog.xuite.net/a25701161/blog/64627085-GIS
+
+
+### 空間交互作用(spatial interaction)
+地理學第一定律，相鄰事物具有相似性，距離遠的事物相異(越進關係越大)。因此**空間交互作用**會用下列作為權重：
+$$
+w_{ij} \propto \frac{1}{d^k}
+$$
+$w_{ij}$為$i、j$ 兩地的交互作用程度，$d$為兩地距離，$k$為依據離遞減的係數。表示距離越遠，交互作用越小。也可改寫為：
+
+$$
+w_{ij} \propto \frac{P_iP_j}{d^k}
+$$
+其中$P_i、P_j$為兩地的屬性質，例如：就業率、人口密度等等。
+
+**引力模型(Gravity Model)**(又稱霍夫模型(Huff Model))為以上的延伸概念，是一種空間互動模式，模型如下：
+
+$$
+P_{ij} = \frac{A^{\alpha}_j \times D^{-\beta}_{ij}}{\sum^n_{j =1}A^{\alpha}_j \times D^{-\beta}_{ij}}
+$$
+- $P_{ij}$: $i$地的人到$j$地商店消費的機率
+- $A_j$: $j$地商店的吸引力
+- $D_{ij}}$: $i、j$兩地距離
+- $\alpha、\beta$: 實證觀察的係數
+
+### 空間自相關(spatial autocorrelation)
+
+也稱為**空間相依(spatial dependency)**，$i$地的觀察值會與$i$地周圍的觀察值有關，距離越遠相關程度越低，且為造成**空間變異(spatial variance)**的主要原因之一，例如：一個地區的犯罪率高，會造成鄰近的周圍地區的犯罪率也高。
+
+## 注意空間資料的陷阱
+
+### 地理尺度
+
+**可調整面積單元問題(the modifiable areal unit problem, MAUP)**即在不同的劃分下，最小的研究單元不同，例如：台灣最小的行政單位為鄰；日本最小的行政單位為町。地理研究可能是很多最小單位的集合，所以不同的集合(或說是畫分)方式就會有不同的結果。通常主要是兩種問題：**加總效應(aggregation effect)**導致的分區問題；以及**空間尺度效應(scale effect)**
+造成的最小空間尺度問題。
+
+- 分區問題
+不同區域劃分影響觀察值的加總，
+```{r aggregation Effect ,echo=FALSE,out.width='90%'}
+knitr::include_graphics("fig\\Ch01\\aggregation Effect.PNG")
+```
+來源：https://www.gislounge.com/modifiable-areal-unit-problem-gis/
+
+- 最小空間尺度問題
+因為定義不同的最小單位，而導致事件分佈看起來不同。
+```{r Scale Effect ,echo=FALSE,  out.width='90%'}
+knitr::include_graphics("fig\\Ch01\\Scale Effect.PNG")
+```
+來源：https://gisgeography.com/maup-modifiable-areal-unit-problem/
+
+### 空間不均與邊緣效應
+
+空間本來就會因為其特質有分布不均的現象，尤其是人文環境與地理分析，例如：銀行搶案集中在人口、銀行較集中的區域，造成群聚的原因就是反映了空間不均。
+
+空間不均衍生了**邊緣效應(edge effect)**，因為研究區域的選定為人為，一定會有些區域位於邊緣，只有半邊的鄰居，研究區域外的鄰居就被忽略，這個問題要小心面對。
