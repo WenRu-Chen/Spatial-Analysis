@@ -24,7 +24,7 @@ options(
 
 # 填上你需要用到的包，如 c('ggplot2', 'dplyr')
 lapply(c(), function(pkg) {
-  if (system.file(package = pkg) == c('tidyverse', "")) install.packages(pkg)
+  if (system.file(package = pkg) == c('tidyverse', "spData","sf")) install.packages(pkg)
 })
 ```
 

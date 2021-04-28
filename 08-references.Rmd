@@ -1,9 +1,13 @@
 `r if (knitr:::is_html_output()) '# 参考文献 {#references .unnumbered}'`
 
-```{r include=FALSE}
-# 自动生成 R 包的参考文献
-knitr::write_bib(c(
-  .packages(), 'bookdown', 'knitr', 'rmarkdown'
-), 'packages.bib')
-```
+- sf 套件介紹
+https://r-spatial.github.io/sf/articles/sf1.html
 
+- 用R畫地圖：
+https://medium.com/dennis-r-data-news/election-results-visualization-with-ggplot2-7db8ec700925
+
+- 經濟資料視覺化：
+https://bookdown.org/tpemartin/108-1-ntpu-datavisualization/annotation-and-maps.html#%E5%B8%B8%E8%A6%8B%E5%9C%96%E8%B3%87%E9%81%8B%E7%AE%97
+
+- 台灣 GIS 資料來源：
+https://blog.abysm.org/2016/04/taiwan-gis-resources/
