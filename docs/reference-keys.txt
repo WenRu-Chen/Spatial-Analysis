@@ -35,4 +35,11 @@ wind
 標準差橢圓
 r-實作-02
 台灣旅館數量
+中心點
+mean-center
+median-center
+mean-center-1
+比較三個中心點
+橢圓
+plot-the-ellipse
 sound

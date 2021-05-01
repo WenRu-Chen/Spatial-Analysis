@@ -184,6 +184,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4" data-path="r-實作-02.html"><a href="r-實作-02.html"><i class="fa fa-check"></i><b>4</b> R 實作 02</a>
 <ul>
 <li class="chapter" data-level="4.1" data-path="r-實作-02.html"><a href="r-實作-02.html#台灣旅館數量"><i class="fa fa-check"></i><b>4.1</b> 台灣旅館數量</a></li>
+<li class="chapter" data-level="4.2" data-path="r-實作-02.html"><a href="r-實作-02.html#中心點"><i class="fa fa-check"></i><b>4.2</b> 中心點</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="r-實作-02.html"><a href="r-實作-02.html#mean-center"><i class="fa fa-check"></i><b>4.2.1</b> mean center</a></li>
+<li class="chapter" data-level="4.2.2" data-path="r-實作-02.html"><a href="r-實作-02.html#median-center"><i class="fa fa-check"></i><b>4.2.2</b> median center</a></li>
+<li class="chapter" data-level="4.2.3" data-path="r-實作-02.html"><a href="r-實作-02.html#mean-center-1"><i class="fa fa-check"></i><b>4.2.3</b> mean center</a></li>
+<li class="chapter" data-level="4.2.4" data-path="r-實作-02.html"><a href="r-實作-02.html#比較三個中心點"><i class="fa fa-check"></i><b>4.2.4</b> 比較三個中心點：</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="r-實作-02.html"><a href="r-實作-02.html#橢圓"><i class="fa fa-check"></i><b>4.3</b> 橢圓</a></li>
+<li class="chapter" data-level="4.4" data-path="r-實作-02.html"><a href="r-實作-02.html#plot-the-ellipse"><i class="fa fa-check"></i><b>4.4</b> plot the ellipse</a></li>
 </ul></li>
 <li class="appendix"><span><b>附录</b></span></li>
 <li class="chapter" data-level="A" data-path="sound.html"><a href="sound.html"><i class="fa fa-check"></i><b>A</b> 余音绕梁</a></li>
@@ -212,23 +221,166 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1><span class="header-section-number">第 4 章</span> R 實作 02</h1>
 <div id="台灣旅館數量" class="section level2" number="4.1">
 <h2><span class="header-section-number">4.1</span> 台灣旅館數量</h2>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="r-實作-02.html#cb25-1" aria-hidden="true" tabindex="-1"></a>sf_taiwan <span class="ot">&lt;-</span> <span class="fu">read_sf</span>(<span class="st">&quot;sf_taiwan</span><span class="sc">\\</span><span class="st">sf_taiwan.shp&quot;</span>)</span>
-<span id="cb25-2"><a href="r-實作-02.html#cb25-2" aria-hidden="true" tabindex="-1"></a> sf_taiwan_simplify <span class="ot">&lt;-</span> sf_taiwan <span class="sc">%&gt;%</span></span>
-<span id="cb25-3"><a href="r-實作-02.html#cb25-3" aria-hidden="true" tabindex="-1"></a>  rmapshaper<span class="sc">::</span><span class="fu">ms_simplify</span>() <span class="co"># 簡化圖形</span></span>
-<span id="cb25-4"><a href="r-實作-02.html#cb25-4" aria-hidden="true" tabindex="-1"></a>sf_hotel <span class="ot">&lt;-</span><span class="fu">read_sf</span>(<span class="st">&quot;Hotel_E_f</span><span class="sc">\\</span><span class="st">Hotel_E_f.shp&quot;</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="r-實作-02.html#cb26-1" aria-hidden="true" tabindex="-1"></a>sf_taiwan_simplify <span class="sc">%&gt;%</span><span class="fu">st_crop</span>(</span>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="r-實作-02.html#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb25-2"><a href="r-實作-02.html#cb25-2" aria-hidden="true" tabindex="-1"></a>sf_taiwan <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">read_sf</span>(<span class="st">&quot;sf_taiwan</span><span class="sc">\\</span><span class="st">sf_taiwan.shp&quot;</span>)</span>
+<span id="cb25-3"><a href="r-實作-02.html#cb25-3" aria-hidden="true" tabindex="-1"></a> sf_taiwan_simplify <span class="ot">&lt;-</span> sf_taiwan <span class="sc">%&gt;%</span></span>
+<span id="cb25-4"><a href="r-實作-02.html#cb25-4" aria-hidden="true" tabindex="-1"></a>  rmapshaper<span class="sc">::</span><span class="fu">ms_simplify</span>() <span class="co"># 簡化圖形</span></span>
+<span id="cb25-5"><a href="r-實作-02.html#cb25-5" aria-hidden="true" tabindex="-1"></a>sf_hotel <span class="ot">&lt;-</span>sf<span class="sc">::</span><span class="fu">read_sf</span>(<span class="st">&quot;Hotel_E_f</span><span class="sc">\\</span><span class="st">Hotel_E_f.shp&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="r-實作-02.html#cb26-1" aria-hidden="true" tabindex="-1"></a>sf_taiwan_simplify <span class="sc">%&gt;%</span> sf<span class="sc">::</span><span class="fu">st_crop</span>(</span>
 <span id="cb26-2"><a href="r-實作-02.html#cb26-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">xmin=</span><span class="dv">119</span>, <span class="at">xmax=</span><span class="dv">123</span>,</span>
 <span id="cb26-3"><a href="r-實作-02.html#cb26-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">ymin=</span><span class="dv">21</span>, <span class="at">ymax=</span><span class="dv">26</span></span>
 <span id="cb26-4"><a href="r-實作-02.html#cb26-4" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
-<span id="cb26-5"><a href="r-實作-02.html#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>()<span class="sc">+</span>  <span class="co"># 第一層是sf_taipei, 以它的CRS為主</span></span>
+<span id="cb26-5"><a href="r-實作-02.html#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>()<span class="sc">+</span>  <span class="co"># 第一層是sf_taiwan, 以它的CRS為主</span></span>
 <span id="cb26-6"><a href="r-實作-02.html#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>()<span class="sc">+</span></span>
-<span id="cb26-7"><a href="r-實作-02.html#cb26-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data=</span>sf_hotel, <span class="at">size =</span> <span class="fl">0.05</span>, <span class="at">color=</span> <span class="st">&quot;#8f2e14&quot;</span>) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill=</span><span class="st">&#39;#c1e4e9&#39;</span>),                        <span class="at">panel.grid.major=</span><span class="fu">element_line</span>(<span class="at">colour=</span><span class="cn">NA</span>))</span></code></pre></div>
+<span id="cb26-7"><a href="r-實作-02.html#cb26-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data=</span>sf_hotel, <span class="at">size =</span> <span class="fl">0.1</span>, <span class="at">color=</span> <span class="st">&quot;#8f2e14&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill=</span><span class="st">&#39;#c1e4e9&#39;</span>),                        <span class="at">panel.grid.major=</span><span class="fu">element_line</span>(<span class="at">colour=</span><span class="cn">NA</span>))</span></code></pre></div>
 <pre><code>## although coordinates are longitude/latitude, st_intersection assumes that they are planar</code></pre>
 <pre><code>## Warning: attribute variables are assumed to be
 ## spatially constant throughout all geometries</code></pre>
-<p><img src="bookdown_files/figure-html/unnamed-chunk-20-1.png" width="672" />
-## 橢圓</p>
-<p>資料來源：<a href="https://data.gov.tw/dataset/73280" class="uri">https://data.gov.tw/dataset/73280</a></p>
+<p><img src="bookdown_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+</div>
+<div id="中心點" class="section level2" number="4.2">
+<h2><span class="header-section-number">4.2</span> 中心點</h2>
+<p><strong>以台南市為例</strong></p>
+<p>畫圖：</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="r-實作-02.html#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(aspace)</span>
+<span id="cb29-2"><a href="r-實作-02.html#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb29-3"><a href="r-實作-02.html#cb29-3" aria-hidden="true" tabindex="-1"></a>sf_Tainan <span class="ot">&lt;-</span> sf_taiwan <span class="sc">%&gt;%</span> <span class="fu">subset</span>(COUNTYNAME <span class="sc">==</span> <span class="st">&quot;臺南市&quot;</span>)</span>
+<span id="cb29-4"><a href="r-實作-02.html#cb29-4" aria-hidden="true" tabindex="-1"></a>sf_hotel_Tainan <span class="ot">&lt;-</span> (sf_hotel <span class="sc">%&gt;%</span> <span class="fu">subset</span>(Region  <span class="sc">==</span> <span class="st">&quot;Tainan City&quot;</span>))</span>
+<span id="cb29-5"><a href="r-實作-02.html#cb29-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-6"><a href="r-實作-02.html#cb29-6" aria-hidden="true" tabindex="-1"></a>Tainana.hetol.plot <span class="ot">&lt;-</span> </span>
+<span id="cb29-7"><a href="r-實作-02.html#cb29-7" aria-hidden="true" tabindex="-1"></a>sf_Tainan <span class="sc">%&gt;%</span> <span class="fu">st_crop</span>(</span>
+<span id="cb29-8"><a href="r-實作-02.html#cb29-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">xmin=</span><span class="dv">118</span>, <span class="at">xmax=</span><span class="dv">121</span>,</span>
+<span id="cb29-9"><a href="r-實作-02.html#cb29-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">ymin=</span><span class="dv">22</span>, <span class="at">ymax=</span><span class="dv">24</span></span>
+<span id="cb29-10"><a href="r-實作-02.html#cb29-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb29-11"><a href="r-實作-02.html#cb29-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>()<span class="sc">+</span>  <span class="co"># 第一層是sf_taiwan, 以它的CRS為主</span></span>
+<span id="cb29-12"><a href="r-實作-02.html#cb29-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>()<span class="sc">+</span></span>
+<span id="cb29-13"><a href="r-實作-02.html#cb29-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data=</span>sf_hotel_Tainan, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">color=</span> <span class="st">&quot;#7b8d42&quot;</span>, <span class="at">alpha=</span> <span class="fl">0.5</span>) <span class="sc">+</span> </span>
+<span id="cb29-14"><a href="r-實作-02.html#cb29-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill=</span><span class="st">&#39;#c1e4e9&#39;</span>),                        <span class="at">panel.grid.major=</span><span class="fu">element_line</span>(<span class="at">colour=</span><span class="cn">NA</span>))</span>
+<span id="cb29-15"><a href="r-實作-02.html#cb29-15" aria-hidden="true" tabindex="-1"></a>Tainana.hetol.plot</span></code></pre></div>
+<p><img src="bookdown_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+<p>整理資料：</p>
+<div id="mean-center" class="section level3" number="4.2.1">
+<h3><span class="header-section-number">4.2.1</span> mean center</h3>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="r-實作-02.html#cb30-1" aria-hidden="true" tabindex="-1"></a>mean_c <span class="ot">&lt;-</span> <span class="fu">mean_centre</span>(<span class="at">id=</span><span class="dv">1</span>, <span class="at">filename=</span><span class="st">&quot;sf_hotel_Tainan&quot;</span>, </span>
+<span id="cb30-2"><a href="r-實作-02.html#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="at">weighted=</span><span class="cn">FALSE</span>, <span class="at">weights=</span><span class="cn">NULL</span>, <span class="at">points=</span>sf_hotel_Tainan.xy)</span></code></pre></div>
+<pre><code>##   id CENTRE.x CENTRE.y
+## 1  1    120.2    23.06</code></pre>
+</div>
+<div id="median-center" class="section level3" number="4.2.2">
+<h3><span class="header-section-number">4.2.2</span> median center</h3>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="r-實作-02.html#cb32-1" aria-hidden="true" tabindex="-1"></a>median_c <span class="ot">&lt;-</span> <span class="fu">median_centre</span>(<span class="at">id=</span><span class="dv">1</span>, <span class="at">filename=</span><span class="st">&quot;sf_hotel_Tainan&quot;</span>, </span>
+<span id="cb32-2"><a href="r-實作-02.html#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="at">points=</span>sf_hotel_Tainan.xy)</span></code></pre></div>
+<pre><code>##   id median.x median.y
+## 1  1    120.2       23</code></pre>
+</div>
+<div id="mean-center-1" class="section level3" number="4.2.3">
+<h3><span class="header-section-number">4.2.3</span> mean center</h3>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="r-實作-02.html#cb34-1" aria-hidden="true" tabindex="-1"></a>CF <span class="ot">&lt;-</span> <span class="fu">CF</span>(<span class="at">id=</span><span class="dv">1</span>, <span class="at">filename=</span><span class="st">&quot;sf_hotel_Tainan&quot;</span>, <span class="at">points=</span>sf_hotel_Tainan.xy)</span></code></pre></div>
+<pre><code>##   id  CF.x CF.y
+## 1  1 120.2   23</code></pre>
+<p>另外還有一個是課本裡沒提到的：
+- <strong>Centre of Minimum Distance</strong></p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="r-實作-02.html#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CMD(id=1, filename=&quot;sf_hotel_Tainan&quot;, dist=10, </span></span>
+<span id="cb36-2"><a href="r-實作-02.html#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="co"># points=sf_hotel_Tainan.xy)</span></span></code></pre></div>
+</div>
+<div id="比較三個中心點" class="section level3" number="4.2.4">
+<h3><span class="header-section-number">4.2.4</span> 比較三個中心點：</h3>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="r-實作-02.html#cb37-1" aria-hidden="true" tabindex="-1"></a>Tainana.hetol.plot <span class="sc">+</span><span class="fu">geom_point</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> CF<span class="sc">$</span>CF.x, <span class="at">y =</span> CF<span class="sc">$</span>CF.y), <span class="at">shape =</span> <span class="dv">11</span>, <span class="at">color =</span> <span class="st">&quot;#483c4d&quot;</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>)<span class="sc">+</span></span>
+<span id="cb37-2"><a href="r-實作-02.html#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> mean_c<span class="sc">$</span>CENTRE.x, <span class="at">y =</span> mean_c<span class="sc">$</span>CENTRE.y))<span class="sc">+</span></span>
+<span id="cb37-3"><a href="r-實作-02.html#cb37-3" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_point</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> median_c<span class="sc">$</span>median.x, <span class="at">y =</span> median_c<span class="sc">$</span>median.y), <span class="at">shape =</span> <span class="dv">1</span>, <span class="at">color =</span> <span class="st">&quot;#420a00&quot;</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>)<span class="sc">+</span></span>
+<span id="cb37-4"><a href="r-實作-02.html#cb37-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> <span class="st">&quot;&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+</div>
+</div>
+<div id="橢圓" class="section level2" number="4.3">
+<h2><span class="header-section-number">4.3</span> 橢圓</h2>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="r-實作-02.html#cb38-1" aria-hidden="true" tabindex="-1"></a> <span class="fu">calc_sde</span>(<span class="at">id=</span><span class="dv">1</span>,<span class="at">points=</span>sf_hotel_Tainan.xy)</span></code></pre></div>
+<pre><code>## $id
+## [1] 1
+## 
+## $CALCCENTRE
+## [1] TRUE
+## 
+## $weighted
+## [1] FALSE
+## 
+## $CENTRE.x
+## [1] 120.2
+## 
+## $CENTRE.y
+## [1] 23.06
+## 
+## $Sigma.x
+## [1] 0.07564
+## 
+## $Sigma.y
+## [1] 0.2038
+## 
+## $Major
+## [1] &quot;SigmaY&quot;
+## 
+## $Minor
+## [1] &quot;SigmaX&quot;
+## 
+## $Theta
+## [1] 38.74
+## 
+## $Eccentricity
+## [1] 0.9286
+## 
+## $Area.sde
+## [1] 0.04844
+## 
+## $TanTheta
+## [1] 0.8022
+## 
+## $SinTheta
+## [1] 0.6257
+## 
+## $CosTheta
+## [1] 0.78
+## 
+## $SinThetaCosTheta
+## [1] 0.4881
+## 
+## $Sin2Theta
+## [1] 0.3915
+## 
+## $Cos2Theta
+## [1] 0.6085
+## 
+## $ThetaCorr
+## [1] 38.74</code></pre>
+</div>
+<div id="plot-the-ellipse" class="section level2" number="4.4">
+<h2><span class="header-section-number">4.4</span> plot the ellipse</h2>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="r-實作-02.html#cb40-1" aria-hidden="true" tabindex="-1"></a>rotation <span class="ot">=</span> <span class="cf">function</span>(a){</span>
+<span id="cb40-2"><a href="r-實作-02.html#cb40-2" aria-hidden="true" tabindex="-1"></a>  r <span class="ot">=</span> a <span class="sc">*</span> pi <span class="sc">/</span> <span class="dv">180</span> <span class="co">#degrees to radians</span></span>
+<span id="cb40-3"><a href="r-實作-02.html#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="fu">cos</span>(r), <span class="fu">sin</span>(r), <span class="sc">-</span><span class="fu">sin</span>(r), <span class="fu">cos</span>(r)), <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">ncol =</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span> <span class="fu">return</span>()</span>
+<span id="cb40-4"><a href="r-實作-02.html#cb40-4" aria-hidden="true" tabindex="-1"></a>}   <span class="co"># 旋轉矩陣(Rotation matrix)</span></span>
+<span id="cb40-5"><a href="r-實作-02.html#cb40-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-6"><a href="r-實作-02.html#cb40-6" aria-hidden="true" tabindex="-1"></a>CENTRE.x <span class="ot">&lt;-</span> <span class="fu">mean</span>(sf_hotel_Tainan.xy<span class="sc">$</span>Px); CENTRE.y <span class="ot">&lt;-</span> <span class="fu">mean</span>(sf_hotel_Tainan.xy<span class="sc">$</span>Py) <span class="co"># 圓心，就是平均</span></span>
+<span id="cb40-7"><a href="r-實作-02.html#cb40-7" aria-hidden="true" tabindex="-1"></a>Sigma.x <span class="ot">=</span> <span class="fl">0.07563829</span>; Sigma.y <span class="ot">=</span> <span class="fl">0.2038352</span> <span class="co"># 半徑</span></span>
+<span id="cb40-8"><a href="r-實作-02.html#cb40-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-9"><a href="r-實作-02.html#cb40-9" aria-hidden="true" tabindex="-1"></a>theta <span class="ot">&lt;-</span> <span class="fl">38.73579</span><span class="sc">*</span> pi <span class="sc">/</span> <span class="dv">180</span></span>
+<span id="cb40-10"><a href="r-實作-02.html#cb40-10" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="fu">rotation</span>(theta)</span>
+<span id="cb40-11"><a href="r-實作-02.html#cb40-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-12"><a href="r-實作-02.html#cb40-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggforce)</span></code></pre></div>
+<pre><code>## Warning: package &#39;ggforce&#39; was built under R version
+## 4.0.5</code></pre>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="r-實作-02.html#cb42-1" aria-hidden="true" tabindex="-1"></a>Tainana.hetol.plot<span class="sc">+</span></span>
+<span id="cb42-2"><a href="r-實作-02.html#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> CENTRE.x, <span class="at">y =</span> CENTRE.y))<span class="sc">+</span></span>
+<span id="cb42-3"><a href="r-實作-02.html#cb42-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> CENTRE.y<span class="sc">-</span>CENTRE.x<span class="sc">*</span><span class="fu">tan</span>(theta), <span class="at">slope =</span> <span class="fu">tan</span>(theta))<span class="sc">+</span></span>
+<span id="cb42-4"><a href="r-實作-02.html#cb42-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> CENTRE.y<span class="sc">+</span>CENTRE.x<span class="sc">*</span>(<span class="fu">tan</span>(theta)), <span class="at">slope =</span> <span class="sc">-</span><span class="fu">tan</span>(theta))<span class="sc">+</span></span>
+<span id="cb42-5"><a href="r-實作-02.html#cb42-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ellipse</span>(<span class="fu">aes</span>(<span class="at">x0 =</span> CENTRE.x, <span class="at">y0 =</span> CENTRE.y, <span class="at">a =</span> Sigma.y, <span class="at">b =</span> Sigma.x, <span class="at">angle =</span> theta)) </span></code></pre></div>
+<pre><code>## Warning: range backtransformation not implemented in
+## this coord; results may be wrong.</code></pre>
+<pre><code>## Warning: range backtransformation not implemented in
+## this coord; results may be wrong.</code></pre>
+<p><img src="bookdown_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
+<p>資料來源：</p>
+<p><a href="https://data.gov.tw/dataset/73280" class="uri">https://data.gov.tw/dataset/73280</a></p>
+<p><a href="https://rstudio-pubs-static.s3.amazonaws.com/202534_2c5edc19016247ac9ecfc5713b4604f2.html" class="uri">https://rstudio-pubs-static.s3.amazonaws.com/202534_2c5edc19016247ac9ecfc5713b4604f2.html</a></p>
 
 </div>
 </div>
