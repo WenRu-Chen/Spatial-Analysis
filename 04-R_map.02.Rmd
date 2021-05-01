@@ -1,0 +1,26 @@
+# R 實作 02
+
+## 台灣旅館數量
+
+```{r}
+sf_taiwan <- read_sf("sf_taiwan\\sf_taiwan.shp")
+ sf_taiwan_simplify <- sf_taiwan %>%
+  rmapshaper::ms_simplify() # 簡化圖形
+sf_hotel <-read_sf("Hotel_E_f\\Hotel_E_f.shp")
+```
+
+```{r}
+sf_taiwan_simplify %>%st_crop(
+    xmin=119, xmax=123,
+    ymin=21, ymax=26
+  ) %>% 
+  ggplot()+  # 第一層是sf_taipei, 以它的CRS為主
+  geom_sf()+
+  geom_sf(data=sf_hotel, size = 0.05, color= "#8f2e14") + theme(panel.background = element_rect(fill='#c1e4e9'),                        panel.grid.major=element_line(colour=NA))
+```
+## 橢圓
+
+
+
+
+資料來源：https://data.gov.tw/dataset/73280
