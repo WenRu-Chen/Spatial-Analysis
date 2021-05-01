@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>第 2 章 R_讀取shp檔+畫地圖 | 空間統計</title>
+  <meta name="description" content="就是一點筆記。" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="第 2 章 R_讀取shp檔+畫地圖 | 空間統計" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="就是一點筆記。" />
+  <meta name="github-repo" content="yihui/bookdown-chinese" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="第 2 章 R_讀取shp檔+畫地圖 | 空間統計" />
+  
+  <meta name="twitter:description" content="就是一點筆記。" />
+  
+
+<meta name="author" content="延畢菸酒生" />
+
+
+<meta name="date" content="2021-05-01" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="SpatialThinking.html"/>
+<link rel="next" href="PointEvents.html"/>
+<script src="libs/header-attrs/header-attrs.js"></script>
+<script src="libs/jquery/jquery.min.js"></script>
+<link href="libs/gitbook/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="css/style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">中文書</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>簡介</a></li>
+<li class="chapter" data-level="" data-path="author.html"><a href="author.html"><i class="fa fa-check"></i>筆記</a></li>
+<li class="chapter" data-level="1" data-path="SpatialThinking.html"><a href="SpatialThinking.html"><i class="fa fa-check"></i><b>1</b> 空間思考</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="SpatialThinking.html"><a href="SpatialThinking.html#實體地理空間"><i class="fa fa-check"></i><b>1.1</b> 實體地理空間</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="SpatialThinking.html"><a href="SpatialThinking.html#地理資料模型"><i class="fa fa-check"></i><b>1.1.1</b> 地理資料模型</a></li>
+<li class="chapter" data-level="1.1.2" data-path="SpatialThinking.html"><a href="SpatialThinking.html#屬性資料與測量尺度"><i class="fa fa-check"></i><b>1.1.2</b> 屬性資料與測量尺度</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="SpatialThinking.html"><a href="SpatialThinking.html#地理空間分析"><i class="fa fa-check"></i><b>1.2</b> 地理空間分析</a>
+<ul>
+<li class="chapter" data-level="1.2.1" data-path="SpatialThinking.html"><a href="SpatialThinking.html#距離"><i class="fa fa-check"></i><b>1.2.1</b> 距離</a></li>
+<li class="chapter" data-level="1.2.2" data-path="SpatialThinking.html"><a href="SpatialThinking.html#鄰近性"><i class="fa fa-check"></i><b>1.2.2</b> 鄰近性</a></li>
+<li class="chapter" data-level="1.2.3" data-path="SpatialThinking.html"><a href="SpatialThinking.html#矩陣"><i class="fa fa-check"></i><b>1.2.3</b> 矩陣</a></li>
+<li class="chapter" data-level="1.2.4" data-path="SpatialThinking.html"><a href="SpatialThinking.html#鄰近多邊形"><i class="fa fa-check"></i><b>1.2.4</b> 鄰近多邊形</a></li>
+<li class="chapter" data-level="1.2.5" data-path="SpatialThinking.html"><a href="SpatialThinking.html#空間交互作用spatial-interaction"><i class="fa fa-check"></i><b>1.2.5</b> 空間交互作用(spatial interaction)</a></li>
+<li class="chapter" data-level="1.2.6" data-path="SpatialThinking.html"><a href="SpatialThinking.html#空間自相關spatial-autocorrelation"><i class="fa fa-check"></i><b>1.2.6</b> 空間自相關(spatial autocorrelation)</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="SpatialThinking.html"><a href="SpatialThinking.html#注意空間資料的陷阱"><i class="fa fa-check"></i><b>1.3</b> 注意空間資料的陷阱</a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="SpatialThinking.html"><a href="SpatialThinking.html#地理尺度"><i class="fa fa-check"></i><b>1.3.1</b> 地理尺度</a></li>
+<li class="chapter" data-level="1.3.2" data-path="SpatialThinking.html"><a href="SpatialThinking.html#空間不均與邊緣效應"><i class="fa fa-check"></i><b>1.3.2</b> 空間不均與邊緣效應</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="Rmap01.html"><a href="Rmap01.html"><i class="fa fa-check"></i><b>2</b> R_讀取shp檔+畫地圖</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="Rmap01.html"><a href="Rmap01.html#找中心點st_centroid"><i class="fa fa-check"></i><b>2.1</b> 找中心點：<code>st_centroid()</code></a></li>
+<li class="chapter" data-level="2.2" data-path="Rmap01.html"><a href="Rmap01.html#輸出座標st_coordinates"><i class="fa fa-check"></i><b>2.2</b> 輸出座標：<code>st_coordinates()</code></a></li>
+<li class="chapter" data-level="2.3" data-path="Rmap01.html"><a href="Rmap01.html#簡單的統計地圖"><i class="fa fa-check"></i><b>2.3</b> 簡單的統計地圖</a></li>
+<li class="chapter" data-level="2.4" data-path="Rmap01.html"><a href="Rmap01.html#世界人口變化百分比"><i class="fa fa-check"></i><b>2.4</b> 2021世界人口變化百分比</a></li>
+<li class="chapter" data-level="2.5" data-path="Rmap01.html"><a href="Rmap01.html#擷取一部分地圖"><i class="fa fa-check"></i><b>2.5</b> 擷取一部分地圖</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="PointEvents.html"><a href="PointEvents.html"><i class="fa fa-check"></i><b>3</b> 點事件的空間型態</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="PointEvents.html"><a href="PointEvents.html#空間型態分析之前的準備動作"><i class="fa fa-check"></i><b>3.1</b> 空間型態分析之前的準備動作</a></li>
+<li class="chapter" data-level="3.2" data-path="PointEvents.html"><a href="PointEvents.html#空間分布的中心趨勢"><i class="fa fa-check"></i><b>3.2</b> 空間分布的中心趨勢</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="PointEvents.html"><a href="PointEvents.html#平均中心點"><i class="fa fa-check"></i><b>3.2.1</b> 平均中心點</a></li>
+<li class="chapter" data-level="3.2.2" data-path="PointEvents.html"><a href="PointEvents.html#中位數中心點"><i class="fa fa-check"></i><b>3.2.2</b> 中位數中心點</a></li>
+<li class="chapter" data-level="3.2.3" data-path="PointEvents.html"><a href="PointEvents.html#中心地理物件"><i class="fa fa-check"></i><b>3.2.3</b> 中心地理物件</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="PointEvents.html"><a href="PointEvents.html#空間分布的分散程度"><i class="fa fa-check"></i><b>3.3</b> 空間分布的分散程度</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="PointEvents.html"><a href="PointEvents.html#標準距離"><i class="fa fa-check"></i><b>3.3.1</b> 標準距離</a></li>
+<li class="chapter" data-level="3.3.2" data-path="PointEvents.html"><a href="PointEvents.html#標準差橢圓"><i class="fa fa-check"></i><b>3.3.2</b> 標準差橢圓</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="Rmap02.html"><a href="Rmap02.html"><i class="fa fa-check"></i><b>4</b> R 實作 02</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="Rmap02.html"><a href="Rmap02.html#台灣旅館數量"><i class="fa fa-check"></i><b>4.1</b> 台灣旅館數量</a></li>
+<li class="chapter" data-level="4.2" data-path="Rmap02.html"><a href="Rmap02.html#中心點"><i class="fa fa-check"></i><b>4.2</b> 中心點</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="Rmap02.html"><a href="Rmap02.html#mean-center"><i class="fa fa-check"></i><b>4.2.1</b> mean center</a></li>
+<li class="chapter" data-level="4.2.2" data-path="Rmap02.html"><a href="Rmap02.html#median-center"><i class="fa fa-check"></i><b>4.2.2</b> median center</a></li>
+<li class="chapter" data-level="4.2.3" data-path="Rmap02.html"><a href="Rmap02.html#mean-center-1"><i class="fa fa-check"></i><b>4.2.3</b> mean center</a></li>
+<li class="chapter" data-level="4.2.4" data-path="Rmap02.html"><a href="Rmap02.html#比較三個中心點"><i class="fa fa-check"></i><b>4.2.4</b> 比較三個中心點：</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="Rmap02.html"><a href="Rmap02.html#橢圓"><i class="fa fa-check"></i><b>4.3</b> 橢圓</a></li>
+<li class="chapter" data-level="4.4" data-path="Rmap02.html"><a href="Rmap02.html#plot-the-ellipse"><i class="fa fa-check"></i><b>4.4</b> plot the ellipse</a></li>
+</ul></li>
+<li class="appendix"><span><b>附錄</b></span></li>
+<li class="chapter" data-level="A" data-path="sound.html"><a href="sound.html"><i class="fa fa-check"></i><b>A</b> 附錄01</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>統蕉恅瓬</a></li>
+<li class="divider"></li>
+<li><a href="https://bookdown.org" target="blank">讀書筆記</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">空間統計</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="Rmap01" class="section level1" number="2">
+<h1><span class="header-section-number">第 2 章</span> R_讀取shp檔+畫地圖</h1>
+<p>shp檔其實是由數個檔形成的向量地理圖資，包含：.shp, .shx, .dbf （前三個必需要有）及 .prj等一系列「相同名稱」、「不同副檔名」組成的地理資訊。(<a href="https://bookdown.org/tpemartin/108-1-ntpu-datavisualization/annotation-and-maps.html#%E8%AE%80%E5%85%A5shp%E6%AA%94" class="uri">https://bookdown.org/tpemartin/108-1-ntpu-datavisualization/annotation-and-maps.html#%E8%AE%80%E5%85%A5shp%E6%AA%94</a>)</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="Rmap01.html#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 取出spData套件附的world data</span></span>
+<span id="cb6-2"><a href="Rmap01.html#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(world,<span class="at">package=</span><span class="st">&quot;spData&quot;</span>)</span>
+<span id="cb6-3"><a href="Rmap01.html#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(world) <span class="co"># 已是sf object</span></span></code></pre></div>
+<pre><code>## [1] &quot;sf&quot;         &quot;tbl_df&quot;     &quot;tbl&quot;        &quot;data.frame&quot;</code></pre>
+<p>查看目前的CRS(地圖的投影法，也稱之為座標參考系統)：</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="Rmap01.html#cb8-1" aria-hidden="true" tabindex="-1"></a>world <span class="sc">%&gt;%</span> st_crs</span></code></pre></div>
+<pre><code>## Coordinate Reference System:
+##   User input: EPSG:4326 
+##   wkt:
+## GEOGCS[&quot;WGS 84&quot;,
+##     DATUM[&quot;WGS_1984&quot;,
+##         SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,
+##             AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],
+##         AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],
+##     PRIMEM[&quot;Greenwich&quot;,0,
+##         AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],
+##     UNIT[&quot;degree&quot;,0.0174532925199433,
+##         AUTHORITY[&quot;EPSG&quot;,&quot;9122&quot;]],
+##     AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="Rmap01.html#cb10-1" aria-hidden="true" tabindex="-1"></a>world_plot <span class="ot">&lt;-</span> world <span class="sc">%&gt;%</span> <span class="fu">st_geometry</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb10-2"><a href="Rmap01.html#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>()</span>
+<span id="cb10-3"><a href="Rmap01.html#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="Rmap01.html#cb10-4" aria-hidden="true" tabindex="-1"></a>world_plot<span class="sc">+</span><span class="fu">geom_sf</span>()</span></code></pre></div>
+<p><img src="bookdown_files/figure-html/unnamed-chunk-6-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<p>更換CRS：</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="Rmap01.html#cb11-1" aria-hidden="true" tabindex="-1"></a>world <span class="sc">%&gt;%</span> </span>
+<span id="cb11-2"><a href="Rmap01.html#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="at">crs=</span><span class="st">&quot;+proj=laea +y_0=0 +lon_0=155 +lat_0=-90 +ellps=WGS84 +no_defs&quot;</span>) <span class="ot">-&gt;</span> world_proj</span>
+<span id="cb11-3"><a href="Rmap01.html#cb11-3" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb11-4"><a href="Rmap01.html#cb11-4" aria-hidden="true" tabindex="-1"></a>world_proj <span class="sc">%&gt;%</span></span>
+<span id="cb11-5"><a href="Rmap01.html#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>()<span class="sc">+</span><span class="fu">geom_sf</span>()</span></code></pre></div>
+<p><img src="bookdown_files/figure-html/unnamed-chunk-7-1.png" width="100%" style="display: block; margin: auto;" /></p>
+<div id="找中心點st_centroid" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> 找中心點：<code>st_centroid()</code></h2>
+<ul>
+<li>找polygon中心點</li>
+<li>形成新的sf object，有相同data frame但geometry column只是中心點的point geometry.
+-如果一筆feature資料有多個中心點，可以設定：
+<code>st_centroid(..., of_largest_polygon = T)</code></li>
+</ul>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="Rmap01.html#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">&quot;https://www.dropbox.com/s/elnvocol0nnkcc9/sf_northTaiwan.Rda?dl=1&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="Rmap01.html#cb13-1" aria-hidden="true" tabindex="-1"></a>sf_northTaiwan <span class="sc">%&gt;%</span></span>
+<span id="cb13-2"><a href="Rmap01.html#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_centroid</span>(<span class="at">of_largest_polygon =</span> T) <span class="ot">-&gt;</span></span>
+<span id="cb13-3"><a href="Rmap01.html#cb13-3" aria-hidden="true" tabindex="-1"></a>  sf_centroid_northTaiwan</span>
+<span id="cb13-4"><a href="Rmap01.html#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="Rmap01.html#cb13-5" aria-hidden="true" tabindex="-1"></a>sf_centroid_northTaiwan</span></code></pre></div>
+<pre><code>## Simple feature collection with 3 features and 4 fields
+## Geometry type: POINT
+## Dimension:     XY
+## Bounding box:  xmin: 121.6 ymin: 24.99 xmax: 121.7 ymax: 25.12
+## Geodetic CRS:  TWD97
+## # A tibble: 3 x 5
+##   COUNTYID COUNTYCODE COUNTYNAME COUNTYENG      
+## * &lt;chr&gt;    &lt;chr&gt;      &lt;chr&gt;      &lt;chr&gt;          
+## 1 C        10017      基隆市     Keelung City   
+## 2 A        63000      臺北市     Taipei City    
+## 3 F        65000      新北市     New Taipei City
+## # ... with 1 more variable:
+## #   geometry &lt;POINT [arc_degree]&gt;</code></pre>
+</div>
+<div id="輸出座標st_coordinates" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> 輸出座標：<code>st_coordinates()</code></h2>
+<p>找出中心點通常是要為圖加上新的圖層(geom_point layer)，還會再進行geom_point layer data frame架構：</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="Rmap01.html#cb15-1" aria-hidden="true" tabindex="-1"></a>sf_centroid_northTaiwan <span class="sc">%&gt;%</span></span>
+<span id="cb15-2"><a href="Rmap01.html#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_coordinates</span>() <span class="ot">-&gt;</span> coord_centroid_northTaiwan <span class="co"># 取出中心點座標</span></span>
+<span id="cb15-3"><a href="Rmap01.html#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="Rmap01.html#cb15-4" aria-hidden="true" tabindex="-1"></a>coord_centroid_northTaiwan</span></code></pre></div>
+<pre><code>##       X     Y
+## 1 121.7 25.12
+## 2 121.6 25.08
+## 3 121.6 24.99</code></pre>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="Rmap01.html#cb17-1" aria-hidden="true" tabindex="-1"></a>sf_northTaiwan<span class="sc">$</span>x_centroid <span class="ot">&lt;-</span> coord_centroid_northTaiwan[,<span class="st">&quot;X&quot;</span>]</span>
+<span id="cb17-2"><a href="Rmap01.html#cb17-2" aria-hidden="true" tabindex="-1"></a>sf_northTaiwan<span class="sc">$</span>y_centroid <span class="ot">&lt;-</span> coord_centroid_northTaiwan[,<span class="st">&quot;Y&quot;</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="Rmap01.html#cb18-1" aria-hidden="true" tabindex="-1"></a>sf_northTaiwan <span class="sc">%&gt;%</span></span>
+<span id="cb18-2"><a href="Rmap01.html#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>()<span class="sc">+</span></span>
+<span id="cb18-3"><a href="Rmap01.html#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>()<span class="sc">+</span></span>
+<span id="cb18-4"><a href="Rmap01.html#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(</span>
+<span id="cb18-5"><a href="Rmap01.html#cb18-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(</span>
+<span id="cb18-6"><a href="Rmap01.html#cb18-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">x=</span>x_centroid,<span class="at">y=</span>y_centroid, </span>
+<span id="cb18-7"><a href="Rmap01.html#cb18-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">shape=</span>COUNTYNAME, <span class="at">color=</span>COUNTYNAME</span>
+<span id="cb18-8"><a href="Rmap01.html#cb18-8" aria-hidden="true" tabindex="-1"></a>    ), <span class="at">size=</span><span class="dv">2</span></span>
+<span id="cb18-9"><a href="Rmap01.html#cb18-9" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<p><img src="bookdown_files/figure-html/unnamed-chunk-12-1.png" width="100%" style="display: block; margin: auto;" />
+- 由 <a href="https://data.gov.tw/dataset/7442" class="uri">https://data.gov.tw/dataset/7442</a> 引入台灣直轄市、縣市界線圖資存在名為sf_taiwan的物件。</p>
+<ul>
+<li>增加文字：<code>geom_sf_text()</code>,<code>geom_sf_label()</code></li>
+</ul>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="Rmap01.html#cb19-1" aria-hidden="true" tabindex="-1"></a>sf_taiwan<span class="ot">=</span><span class="fu">read_sf</span>(<span class="st">&quot;sf_taiwan</span><span class="sc">\\</span><span class="st">sf_taiwan.shp&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="Rmap01.html#cb20-1" aria-hidden="true" tabindex="-1"></a> sf_taiwan_simplify <span class="ot">&lt;-</span> sf_taiwan <span class="sc">%&gt;%</span></span>
+<span id="cb20-2"><a href="Rmap01.html#cb20-2" aria-hidden="true" tabindex="-1"></a>  rmapshaper<span class="sc">::</span><span class="fu">ms_simplify</span>() <span class="co"># 幾何簡化(畫比較快)</span></span>
+<span id="cb20-3"><a href="Rmap01.html#cb20-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-4"><a href="Rmap01.html#cb20-4" aria-hidden="true" tabindex="-1"></a>sf_taiwan_simplify <span class="sc">%&gt;%</span></span>
+<span id="cb20-5"><a href="Rmap01.html#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_crop</span>(</span>
+<span id="cb20-6"><a href="Rmap01.html#cb20-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">xmin=</span><span class="dv">119</span>, <span class="at">xmax=</span><span class="dv">123</span>,</span>
+<span id="cb20-7"><a href="Rmap01.html#cb20-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">ymin=</span><span class="dv">21</span>, <span class="at">ymax=</span><span class="dv">26</span></span>
+<span id="cb20-8"><a href="Rmap01.html#cb20-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb20-9"><a href="Rmap01.html#cb20-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>()<span class="sc">+</span><span class="fu">geom_sf</span>()<span class="sc">+</span></span>
+<span id="cb20-10"><a href="Rmap01.html#cb20-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf_text</span>(</span>
+<span id="cb20-11"><a href="Rmap01.html#cb20-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">label=</span>COUNTYNAME)</span>
+<span id="cb20-12"><a href="Rmap01.html#cb20-12" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<p><img src="bookdown_files/figure-html/unnamed-chunk-14-1.png" width="100%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="簡單的統計地圖" class="section level2" number="2.3">
+<h2><span class="header-section-number">2.3</span> 簡單的統計地圖</h2>
+<p>可以自己找些關於台灣的資料，現在我找的是台灣稻米產量。</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="Rmap01.html#cb21-1" aria-hidden="true" tabindex="-1"></a>Rice <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Rice.csv&quot;</span> , <span class="at">encoding=</span><span class="st">&#39;BIG5&#39;</span>)</span>
+<span id="cb21-2"><a href="Rmap01.html#cb21-2" aria-hidden="true" tabindex="-1"></a>Rice <span class="ot">&lt;-</span> Rice[,<span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">4</span>)]</span>
+<span id="cb21-3"><a href="Rmap01.html#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(Rice) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;COUNTYNAME&quot;</span>, <span class="st">&quot;AREA&quot;</span>)</span>
+<span id="cb21-4"><a href="Rmap01.html#cb21-4" aria-hidden="true" tabindex="-1"></a>Rice<span class="sc">$</span>COUNTYNAME <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;台中市&quot;</span>, <span class="st">&quot;台東縣&quot;</span>,<span class="st">&quot;台南市&quot;</span>,<span class="st">&quot;宜蘭縣&quot;</span>,<span class="st">&quot;花蓮縣&quot;</span>,<span class="st">&quot;南投縣&quot;</span>,<span class="st">&quot;屏東縣&quot;</span></span>
+<span id="cb21-5"><a href="Rmap01.html#cb21-5" aria-hidden="true" tabindex="-1"></a>,<span class="st">&quot;苗栗縣&quot;</span>,<span class="st">&quot;桃園市&quot;</span>,<span class="st">&quot;高雄市&quot;</span>,<span class="st">&quot;雲林縣&quot;</span>,<span class="st">&quot;新北市&quot;</span>,<span class="st">&quot;新竹市&quot;</span>,<span class="st">&quot;新竹縣&quot;</span>,<span class="st">&quot;嘉義市&quot;</span>,<span class="st">&quot;嘉義縣&quot;</span>,<span class="st">&quot;彰化縣&quot;</span>)</span>
+<span id="cb21-6"><a href="Rmap01.html#cb21-6" aria-hidden="true" tabindex="-1"></a>sf_taiwan.new <span class="ot">&lt;-</span> <span class="fu">left_join</span>(sf_taiwan, Rice, <span class="at">by =</span> <span class="st">&quot;COUNTYNAME&quot;</span>)</span>
+<span id="cb21-7"><a href="Rmap01.html#cb21-7" aria-hidden="true" tabindex="-1"></a> sf_taiwan.new_simplify <span class="ot">&lt;-</span> sf_taiwan.new <span class="sc">%&gt;%</span></span>
+<span id="cb21-8"><a href="Rmap01.html#cb21-8" aria-hidden="true" tabindex="-1"></a>  rmapshaper<span class="sc">::</span><span class="fu">ms_simplify</span>()</span>
+<span id="cb21-9"><a href="Rmap01.html#cb21-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-10"><a href="Rmap01.html#cb21-10" aria-hidden="true" tabindex="-1"></a>sf_taiwan.new_simplify<span class="sc">%&gt;%</span></span>
+<span id="cb21-11"><a href="Rmap01.html#cb21-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_crop</span>(</span>
+<span id="cb21-12"><a href="Rmap01.html#cb21-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">xmin=</span><span class="dv">119</span>, <span class="at">xmax=</span><span class="dv">123</span>,</span>
+<span id="cb21-13"><a href="Rmap01.html#cb21-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">ymin=</span><span class="dv">21</span>, <span class="at">ymax=</span><span class="dv">26</span></span>
+<span id="cb21-14"><a href="Rmap01.html#cb21-14" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb21-15"><a href="Rmap01.html#cb21-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>()<span class="sc">+</span></span>
+<span id="cb21-16"><a href="Rmap01.html#cb21-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">size =</span> <span class="fl">0.2</span>, <span class="fu">aes</span>(<span class="at">fill =</span>AREA ))<span class="sc">+</span></span>
+<span id="cb21-17"><a href="Rmap01.html#cb21-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradient</span>(<span class="at">low =</span> <span class="st">&quot;#56B1F7&quot;</span>, <span class="at">high =</span> <span class="st">&quot;#132B43&quot;</span>, <span class="at">na.value =</span> <span class="cn">NA</span>)<span class="sc">+</span></span>
+<span id="cb21-18"><a href="Rmap01.html#cb21-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<p><img src="bookdown_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+</div>
+<div id="世界人口變化百分比" class="section level2" number="2.4">
+<h2><span class="header-section-number">2.4</span> 2021世界人口變化百分比</h2>
+<p>資料來來自於：<a href="https://www.worldometers.info/world-population/population-by-country/" class="uri">https://www.worldometers.info/world-population/population-by-country/</a></p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="Rmap01.html#cb22-1" aria-hidden="true" tabindex="-1"></a>world_population <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;2021 World Population.csv&quot;</span>)</span>
+<span id="cb22-2"><a href="Rmap01.html#cb22-2" aria-hidden="true" tabindex="-1"></a>world_population<span class="fl">.1</span> <span class="ot">&lt;-</span> world_population[,<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>)]</span>
+<span id="cb22-3"><a href="Rmap01.html#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(world_population<span class="fl">.1</span>) <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="fu">colnames</span>(world)[<span class="dv">2</span>],<span class="st">&quot;YearlyChange.per&quot;</span>)</span>
+<span id="cb22-4"><a href="Rmap01.html#cb22-4" aria-hidden="true" tabindex="-1"></a>world<span class="fl">.01</span> <span class="ot">&lt;-</span> <span class="fu">left_join</span>(world, world_population<span class="fl">.1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="Rmap01.html#cb23-1" aria-hidden="true" tabindex="-1"></a> world<span class="fl">.01</span> <span class="sc">%&gt;%</span></span>
+<span id="cb23-2"><a href="Rmap01.html#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>()<span class="sc">+</span><span class="fu">geom_sf</span>(<span class="at">size =</span> <span class="fl">0.2</span>, <span class="fu">aes</span>(<span class="at">fill =</span> YearlyChange.per))<span class="sc">+</span> <span class="fu">scale_fill_gradient</span>(<span class="at">low =</span> <span class="st">&quot;#ffffff&quot;</span>, <span class="at">high =</span> <span class="st">&quot;#17184b&quot;</span>, <span class="at">na.value =</span> <span class="cn">NA</span>)<span class="sc">+</span></span>
+<span id="cb23-3"><a href="Rmap01.html#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_bw</span>()</span></code></pre></div>
+<p><img src="bookdown_files/figure-html/unnamed-chunk-17-1.png" width="100%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="擷取一部分地圖" class="section level2" number="2.5">
+<h2><span class="header-section-number">2.5</span> 擷取一部分地圖</h2>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="Rmap01.html#cb24-1" aria-hidden="true" tabindex="-1"></a>world <span class="sc">%&gt;%</span> </span>
+<span id="cb24-2"><a href="Rmap01.html#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(</span>
+<span id="cb24-3"><a href="Rmap01.html#cb24-3" aria-hidden="true" tabindex="-1"></a>    region_un<span class="sc">==</span><span class="st">&quot;Asia&quot;</span></span>
+<span id="cb24-4"><a href="Rmap01.html#cb24-4" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb24-5"><a href="Rmap01.html#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>()<span class="sc">+</span><span class="fu">geom_sf</span>()<span class="sc">+</span></span>
+<span id="cb24-6"><a href="Rmap01.html#cb24-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf_text</span>(</span>
+<span id="cb24-7"><a href="Rmap01.html#cb24-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">label=</span>name_long)</span>
+<span id="cb24-8"><a href="Rmap01.html#cb24-8" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div>
+<p><img src="bookdown_files/figure-html/unnamed-chunk-18-1.png" width="100%" style="display: block; margin: auto;" />
+資料與code來自：
+<a href="https://bookdown.org/tpemartin/108-1-ntpu-datavisualization/" class="uri">https://bookdown.org/tpemartin/108-1-ntpu-datavisualization/</a></p>
+<p><strong>很推薦這個網站，教學仔細，還有許多資料可以練習，真的是讚讚！</strong></p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="SpatialThinking.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="PointEvents.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook/js/app.min.js"></script>
+<script src="libs/gitbook/js/lunr.js"></script>
+<script src="libs/gitbook/js/clipboard.min.js"></script>
+<script src="libs/gitbook/js/plugin-search.js"></script>
+<script src="libs/gitbook/js/plugin-sharing.js"></script>
+<script src="libs/gitbook/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook/js/jquery.highlight.js"></script>
+<script src="libs/gitbook/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/yihui/bookdown-chinese/edit/master/02-Rmap01.Rmd",
+"text": "編輯"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["bookdown.pdf", "bookdown.epub"],
+"toc": {
+"collapse": "none"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

@@ -1,4 +1,4 @@
-intro
+SpatialThinking
 實體地理空間
 地理資料模型
 地理資料模型geographical-data-model
@@ -18,13 +18,13 @@ intro
 注意空間資料的陷阱
 地理尺度
 空間不均與邊緣效應
-wind
+Rmap01
 找中心點st_centroid
 輸出座標st_coordinates
 簡單的統計地圖
 世界人口變化百分比
 擷取一部分地圖
-點事件的空間型態
+PointEvents
 空間型態分析之前的準備動作
 空間分布的中心趨勢
 平均中心點
@@ -33,7 +33,7 @@ wind
 空間分布的分散程度
 標準距離
 標準差橢圓
-r-實作-02
+Rmap02
 台灣旅館數量
 中心點
 mean-center

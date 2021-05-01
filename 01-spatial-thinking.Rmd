@@ -1,6 +1,7 @@
 \mainmatter
 
-# 空間思考 {#intro}
+# 空間思考 {#SpatialThinking}
+
 ```{r  echo = F, include=F, message=F, warning=F}
 library(knitr)
 library(tidyverse)

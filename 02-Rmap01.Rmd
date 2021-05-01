@@ -1,4 +1,4 @@
-# R_讀取shp檔+畫地圖 {#wind}
+# R_讀取shp檔+畫地圖 {#Rmap01}
 
 shp檔其實是由數個檔形成的向量地理圖資，包含：.shp, .shx, .dbf （前三個必需要有）及 .prj等一系列「相同名稱」、「不同副檔名」組成的地理資訊。(https://bookdown.org/tpemartin/108-1-ntpu-datavisualization/annotation-and-maps.html#%E8%AE%80%E5%85%A5shp%E6%AA%94)
 
