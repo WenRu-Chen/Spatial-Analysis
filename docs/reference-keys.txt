@@ -43,3 +43,13 @@ mean-center-1
 橢圓
 plot-the-ellipse
 sound
+fig:unnamed-chunk-2
+Cluster_Detection_in_Point_Event_Data
+空間型態檢定概念
+全域檢定與局部檢定
+空間型態的統計檢定
+統計分析與視覺化觀察
+空間群聚的全域檢定
+樣方分析quadrat-analysis
+最鄰近分析nearest-neighbor-analysis
+距離函數的分析方式distance-function-analysis

@@ -11,3 +11,6 @@ https://bookdown.org/tpemartin/108-1-ntpu-datavisualization/annotation-and-maps.
 
 - 台灣 GIS 資料來源：
 https://blog.abysm.org/2016/04/taiwan-gis-resources/
+
+- 空間觀念與GeoDa：
+http://excel2earth.blogspot.com/2015/05/24.html
