@@ -1,0 +1,87 @@
+# R 實作 03 {#Rmap03}
+
+## 畫地圖
+
+這裡我們用`tmap`，來畫一下台南的人口分布：
+
+```{r set up, warning=FALSE, message=F}
+rm(list=ls())
+library(tidyverse)
+library(spData)
+library(sf)
+```
+
+
+```{r read the data, warning=FALSE, message=F}
+sf_taiwan_town <- sf::read_sf("Taiwan_Town\\TOWN_MOI_1100415.shp")
+sf_tainan_pop <- read.csv("Tainan_pop.csv", fileEncoding = "Big5")
+colnames(sf_tainan_pop) <- c("TOWNNAME", "population","male_pop","female_pop" )
+
+sf_Tainan_town <- sf_taiwan_town %>% filter(COUNTYNAME == "臺南市")
+sf_Tainan_town <- left_join(sf_Tainan_town,sf_tainan_pop[,c(1,2)])
+
+# 讀旅館資料
+sf_hotel <-sf::read_sf("Hotel_E_f\\Hotel_E_f.shp")
+sf_hotel_Tainan <- (sf_hotel %>% subset(Region  == "Tainan City"))
+
+```
+
+```{r}
+library(tmap)
+
+tm_shape(sf_Tainan_town) + tm_polygons(col="population", n = 10, border.col = "white", palette = "Greens")+ # n: 幾個級距 ; 可在裡面加上 breaks = c(0, 23000, 27000, 100000 ) 照裡面的數字分級
+  tm_legend(outside = TRUE) #legend 是否在外面
+```
+```{r warning=F, message=F}
+# 讀旅館資料
+sf_hotel <-sf::read_sf("Hotel_E_f\\Hotel_E_f.shp")
+sf_hotel_Tainan <- (sf_hotel %>% subset(Region  == "Tainan City"))
+
+tm_shape(sf_Tainan_town) + tm_polygons(col="population", n = 10, border.col = "white", palette = "Greens",legend.hist = TRUE)+ # n: 幾個級距 ; 可在裡面加上 breaks = c(0, 23000, 27000, 100000 ) 照裡面的數字分級; legend.hist 長條圖
+  tm_legend(outside = TRUE)+ #legend 是否在外面
+  tm_shape(sf_hotel_Tainan) + # 加上旅館個數的點點   
+    tm_dots(size=  .1, col ="black") 
+```
+人口與旅館數量的地圖
+
+```{r , warning=FALSE, message=F}
+sf_taiwan_town <- sf::read_sf("Taiwan_Town\\TOWN_MOI_1100415.shp")
+sf_tainan_pop <- read.csv("Tainan_pop.csv", fileEncoding = "Big5")
+colnames(sf_tainan_pop) <- c("TOWNNAME", "population","male_pop","female_pop" )
+
+sf_Tainan_town <- sf_taiwan_town %>% filter(COUNTYNAME == "臺南市")
+sf_Tainan_town <- left_join(sf_Tainan_town,sf_tainan_pop[,c(1,2)])
+
+# 讀旅館資料
+sf_hotel <-sf::read_sf("Hotel_E_f\\Hotel_E_f.shp")
+sf_hotel_Tainan <- (sf_hotel %>% subset(Region  == "Tainan City"))
+
+```
+
+```{r 北部疫情, warning=FALSE, message=F}
+sf_taiwan_town <- sf::read_sf("Taiwan_Town\\TOWN_MOI_1100415.shp")
+sf_tainan_pop <- read.csv("Tainan_pop.csv", fileEncoding = "Big5")
+colnames(sf_tainan_pop) <- c("TOWNNAME", "population","male_pop","female_pop" )
+
+sf_Tainan_town <- sf_taiwan_town %>% filter(COUNTYNAME == "臺南市")
+sf_Tainan_town <- left_join(sf_Tainan_town,sf_tainan_pop[,c(1,2)])
+
+# 讀旅館資料
+sf_hotel <-sf::read_sf("Hotel_E_f\\Hotel_E_f.shp")
+sf_hotel_Tainan <- (sf_hotel %>% subset(Region  == "Tainan City"))
+
+```
+
+資料來源：
+
+https://data.gov.tw/dataset/73280
+
+https://rstudio-pubs-static.s3.amazonaws.com/202534_2c5edc19016247ac9ecfc5713b4604f2.html
+
+人口資料：
+https://bca.tainan.gov.tw/News_Content.aspx?n=1134&s=8157
+
+http://spatstat.org/ECAS2019/notes/notes03.html
+
+Point pattern analysis in R
+https://mgimond.github.io/Spatial/point-pattern-analysis-in-r.html

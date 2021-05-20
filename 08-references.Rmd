@@ -14,3 +14,6 @@ https://blog.abysm.org/2016/04/taiwan-gis-resources/
 
 - 空間觀念與GeoDa：
 http://excel2earth.blogspot.com/2015/05/24.html
+
+- 空間分析檢定(wirh R code)：
+https://mgimond.github.io/Spatial/point-pattern-analysis-in-r.html

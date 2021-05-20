@@ -1,3 +1,8 @@
+fig:unnamed-chunk-31
+fig:unnamed-chunk-32
+fig:unnamed-chunk-33
+fig:unnamed-chunk-35
+fig:unnamed-chunk-36
 SpatialThinking
 實體地理空間
 地理資料模型
@@ -42,8 +47,7 @@ mean-center-1
 比較三個中心點
 橢圓
 plot-the-ellipse
-sound
-fig:unnamed-chunk-2
+Rmap03
 Cluster_Detection_in_Point_Event_Data
 空間型態檢定概念
 全域檢定與局部檢定
@@ -52,4 +56,7 @@ Cluster_Detection_in_Point_Event_Data
 空間群聚的全域檢定
 樣方分析quadrat-analysis
 最鄰近分析nearest-neighbor-analysis
+k階最鄰近分析
 距離函數的分析方式distance-function-analysis
+最鄰近分析g-函數與-f-函數的比較
+sound

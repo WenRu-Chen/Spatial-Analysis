@@ -8,7 +8,7 @@ library(tidyverse)
 
 地物的分布可以分成三種：完全的**群聚分布**(clustered)、完全的**分散(均勻)分布**(dispersed)與介於中間的**隨機分布**(random patterns)。
 
-```{r, echo=FALSE, vector&raste, fig.cap='vector&raster', out.width='90%'}
+```{r, echo=FALSE, out.width='90%'}
 knitr::include_graphics("fig\\Ch05\\Spatial-distribution.PNG")
 ```
 來源：http://map-testing.blogspot.com/2016/09/blog-post_26.html
@@ -168,7 +168,7 @@ $$
 
 $G(d)$表示最近距離小於$d$的樣本數比例，隨著$d$增加$G(d)$會越來越接近1。
 
-```{r, echo=FALSE, vector&raste, fig.cap='vector&raster', out.width='90%'}
+```{r, echo=FALSE,  fig.cap='G 函數', out.width='90%'}
 knitr::include_graphics("fig\\Ch05\\G_func.PNG")
 ```
 資料來源：https://silvafennica.fi/article/1008
@@ -191,7 +191,7 @@ $F$函數的優點是可以克服$G$函數樣本過少的問題，因為$F$函�
 
 下圖一樣虛線為隨機分布的函數圖；實線為實際資料：
 
-```{r, echo=FALSE, vector&raste, fig.cap='vector&raster', out.width='90%'}
+```{r, echo=FALSE, fig.cap='F 函數', out.width='90%'}
 knitr::include_graphics("fig\\Ch05\\F_func.PNG")
 ```
 
@@ -235,14 +235,14 @@ $$
 
 下圖為$K$函數的操作方式，就是一直畫圈
 
-```{r, echo=FALSE, vector&raste, fig.cap='vector&raster', out.width='90%'}
+```{r, echo=FALSE, fig.cap='K 函數', out.width='90%'}
 knitr::include_graphics("fig\\Ch05\\K_func.jpg")
 ```
 
 
 畫出來的函數圖形為：
 
-```{r, echo=FALSE, vector&raste, fig.cap='vector&raster', out.width='90%'}
+```{r, echo=FALSE, fig.cap='K 函數02', out.width='90%'}
 knitr::include_graphics("fig\\Ch05\\K_func.02.PNG")
 ```
 來源：http://spatstat.org/ECAS2019/notes/notes03.html

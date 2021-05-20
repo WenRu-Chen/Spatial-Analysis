@@ -1,3 +1,0 @@
-# R 實作 03 {#Rmap03}
-
-資料來源：http://spatstat.org/ECAS2019/notes/notes03.html
