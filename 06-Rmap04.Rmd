@@ -1,21 +1,23 @@
+# R 實作 {#a6_Rmap04}
 
 ```{r message=F,warning=FALSE}
 library(tmap) 
-
-
-sf_taiwan_town <- sf::read_sf("Taiwan_Town\\TOWN_MOI_1100415.shp")
+library(tidyverse)
+library(rgdal)
+library(maptools)
+sf_taiwan_town <- sf::read_sf("C:/Users/ChenWenRu/OneDrive - 國立成功大學 National Cheng Kung University/R_Project/Spatial Analysis/mapdata202104280245\\TOWN_MOI_1100415.shp")
 sf_tainan_pop <- read.csv("Tainan_pop.csv", fileEncoding = "Big5")
 colnames(sf_tainan_pop) <- c("TOWNNAME", "population","male_pop","female_pop" )
 
 sf_Tainan_town <- sf_taiwan_town %>% filter(COUNTYNAME == "臺南市")
-sf_Tainan_town <- left_join(sf_Tainan_town,sf_tainan_pop[,c(1,2)])
+sf_Tainan_town <- left_join(sf_Tainan_town,sf_tainan_pop[,c(1,2)]) 
 
 # 讀旅館資料
-sf_hotel <-sf::read_sf("Hotel_E_f\\Hotel_E_f.shp")
+sf_hotel <-sf::read_sf("C:/Users/ChenWenRu/OneDrive - 國立成功大學 National Cheng Kung University/R_Project/Spatial Analysis/Hotel_E_f\\Hotel_E_f.shp")
 sf_hotel_Tainan <- (sf_hotel %>% subset(Region  == "Tainan City"))
 ```
 
-```{r ,message=F,warning=FALSE}
+```{r ,message=F,warning=FALSE , width = 12, height = 12}
 map_tainan <- tm_shape(sf_Tainan_town) + tm_polygons(col="population", n = 10, border.col = "white", palette = "Greens",legend.hist = TRUE)+ # n: 幾個級距 ; 可在裡面加上 breaks = c(0, 23000, 27000, 100000 ) 照裡面的數字分級; legend.hist 長條圖
 tm_legend(outside = T) #legend 是否在外面
 

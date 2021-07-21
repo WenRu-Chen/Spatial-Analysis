@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>第 4 章 R 實作 02 | 空間統計</title>
+  <meta name="description" content="就是一點筆記。" />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="第 4 章 R 實作 02 | 空間統計" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="就是一點筆記。" />
+  <meta name="github-repo" content="yihui/bookdown-chinese" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="第 4 章 R 實作 02 | 空間統計" />
+  
+  <meta name="twitter:description" content="就是一點筆記。" />
+  
+
+<meta name="author" content="延畢菸酒生" />
+
+
+<meta name="date" content="2021-07-21" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="a3-PointEvents.html"/>
+<link rel="next" href="a5-Cluster-Detection-in-Point-Event-Data.html"/>
+<script src="libs/header-attrs-2.9/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="css/style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">中文書</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>簡介</a></li>
+<li class="chapter" data-level="" data-path="author.html"><a href="author.html"><i class="fa fa-check"></i>筆記</a></li>
+<li class="chapter" data-level="1" data-path="a1-SpatialThinking.html"><a href="a1-SpatialThinking.html"><i class="fa fa-check"></i><b>1</b> 空間思考</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="a1-SpatialThinking.html"><a href="a1-SpatialThinking.html#實體地理空間"><i class="fa fa-check"></i><b>1.1</b> 實體地理空間</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="a1-SpatialThinking.html"><a href="a1-SpatialThinking.html#地理資料模型"><i class="fa fa-check"></i><b>1.1.1</b> 地理資料模型</a></li>
+<li class="chapter" data-level="1.1.2" data-path="a1-SpatialThinking.html"><a href="a1-SpatialThinking.html#屬性資料與測量尺度"><i class="fa fa-check"></i><b>1.1.2</b> 屬性資料與測量尺度</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="a1-SpatialThinking.html"><a href="a1-SpatialThinking.html#地理空間分析"><i class="fa fa-check"></i><b>1.2</b> 地理空間分析</a>
+<ul>
+<li class="chapter" data-level="1.2.1" data-path="a1-SpatialThinking.html"><a href="a1-SpatialThinking.html#距離"><i class="fa fa-check"></i><b>1.2.1</b> 距離</a></li>
+<li class="chapter" data-level="1.2.2" data-path="a1-SpatialThinking.html"><a href="a1-SpatialThinking.html#鄰近性"><i class="fa fa-check"></i><b>1.2.2</b> 鄰近性</a></li>
+<li class="chapter" data-level="1.2.3" data-path="a1-SpatialThinking.html"><a href="a1-SpatialThinking.html#矩陣"><i class="fa fa-check"></i><b>1.2.3</b> 矩陣</a></li>
+<li class="chapter" data-level="1.2.4" data-path="a1-SpatialThinking.html"><a href="a1-SpatialThinking.html#鄰近多邊形"><i class="fa fa-check"></i><b>1.2.4</b> 鄰近多邊形</a></li>
+<li class="chapter" data-level="1.2.5" data-path="a1-SpatialThinking.html"><a href="a1-SpatialThinking.html#空間交互作用spatial-interaction"><i class="fa fa-check"></i><b>1.2.5</b> 空間交互作用(spatial interaction)</a></li>
+<li class="chapter" data-level="1.2.6" data-path="a1-SpatialThinking.html"><a href="a1-SpatialThinking.html#空間自相關spatial-autocorrelation"><i class="fa fa-check"></i><b>1.2.6</b> 空間自相關(spatial autocorrelation)</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="a1-SpatialThinking.html"><a href="a1-SpatialThinking.html#注意空間資料的陷阱"><i class="fa fa-check"></i><b>1.3</b> 注意空間資料的陷阱</a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="a1-SpatialThinking.html"><a href="a1-SpatialThinking.html#地理尺度"><i class="fa fa-check"></i><b>1.3.1</b> 地理尺度</a></li>
+<li class="chapter" data-level="1.3.2" data-path="a1-SpatialThinking.html"><a href="a1-SpatialThinking.html#空間不均與邊緣效應"><i class="fa fa-check"></i><b>1.3.2</b> 空間不均與邊緣效應</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="a2-Rmap01.html"><a href="a2-Rmap01.html"><i class="fa fa-check"></i><b>2</b> R_讀取shp檔+畫地圖</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="a2-Rmap01.html"><a href="a2-Rmap01.html#找中心點st_centroid"><i class="fa fa-check"></i><b>2.1</b> 找中心點：<code>st_centroid()</code></a></li>
+<li class="chapter" data-level="2.2" data-path="a2-Rmap01.html"><a href="a2-Rmap01.html#輸出座標st_coordinates"><i class="fa fa-check"></i><b>2.2</b> 輸出座標：<code>st_coordinates()</code></a></li>
+<li class="chapter" data-level="2.3" data-path="a2-Rmap01.html"><a href="a2-Rmap01.html#簡單的統計地圖"><i class="fa fa-check"></i><b>2.3</b> 簡單的統計地圖</a></li>
+<li class="chapter" data-level="2.4" data-path="a2-Rmap01.html"><a href="a2-Rmap01.html#世界人口變化百分比"><i class="fa fa-check"></i><b>2.4</b> 2021世界人口變化百分比</a></li>
+<li class="chapter" data-level="2.5" data-path="a2-Rmap01.html"><a href="a2-Rmap01.html#擷取一部分地圖"><i class="fa fa-check"></i><b>2.5</b> 擷取一部分地圖</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="a3-PointEvents.html"><a href="a3-PointEvents.html"><i class="fa fa-check"></i><b>3</b> 點事件的空間型態</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="a3-PointEvents.html"><a href="a3-PointEvents.html#空間型態分析之前的準備動作"><i class="fa fa-check"></i><b>3.1</b> 空間型態分析之前的準備動作</a></li>
+<li class="chapter" data-level="3.2" data-path="a3-PointEvents.html"><a href="a3-PointEvents.html#空間分布的中心趨勢"><i class="fa fa-check"></i><b>3.2</b> 空間分布的中心趨勢</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="a3-PointEvents.html"><a href="a3-PointEvents.html#平均中心點"><i class="fa fa-check"></i><b>3.2.1</b> 平均中心點</a></li>
+<li class="chapter" data-level="3.2.2" data-path="a3-PointEvents.html"><a href="a3-PointEvents.html#中位數中心點"><i class="fa fa-check"></i><b>3.2.2</b> 中位數中心點</a></li>
+<li class="chapter" data-level="3.2.3" data-path="a3-PointEvents.html"><a href="a3-PointEvents.html#中心地理物件"><i class="fa fa-check"></i><b>3.2.3</b> 中心地理物件</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="a3-PointEvents.html"><a href="a3-PointEvents.html#空間分布的分散程度"><i class="fa fa-check"></i><b>3.3</b> 空間分布的分散程度</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="a3-PointEvents.html"><a href="a3-PointEvents.html#標準距離"><i class="fa fa-check"></i><b>3.3.1</b> 標準距離</a></li>
+<li class="chapter" data-level="3.3.2" data-path="a3-PointEvents.html"><a href="a3-PointEvents.html#標準差橢圓"><i class="fa fa-check"></i><b>3.3.2</b> 標準差橢圓</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="a4-Rmap02.html"><a href="a4-Rmap02.html"><i class="fa fa-check"></i><b>4</b> R 實作 02</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="a4-Rmap02.html"><a href="a4-Rmap02.html#台灣旅館數量"><i class="fa fa-check"></i><b>4.1</b> 台灣旅館數量</a></li>
+<li class="chapter" data-level="4.2" data-path="a4-Rmap02.html"><a href="a4-Rmap02.html#中心點"><i class="fa fa-check"></i><b>4.2</b> 中心點</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="a4-Rmap02.html"><a href="a4-Rmap02.html#mean-center"><i class="fa fa-check"></i><b>4.2.1</b> mean center</a></li>
+<li class="chapter" data-level="4.2.2" data-path="a4-Rmap02.html"><a href="a4-Rmap02.html#median-center"><i class="fa fa-check"></i><b>4.2.2</b> median center</a></li>
+<li class="chapter" data-level="4.2.3" data-path="a4-Rmap02.html"><a href="a4-Rmap02.html#mean-center-1"><i class="fa fa-check"></i><b>4.2.3</b> mean center</a></li>
+<li class="chapter" data-level="4.2.4" data-path="a4-Rmap02.html"><a href="a4-Rmap02.html#比較三個中心點"><i class="fa fa-check"></i><b>4.2.4</b> 比較三個中心點：</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="a4-Rmap02.html"><a href="a4-Rmap02.html#橢圓"><i class="fa fa-check"></i><b>4.3</b> 橢圓</a></li>
+<li class="chapter" data-level="4.4" data-path="a4-Rmap02.html"><a href="a4-Rmap02.html#plot-the-ellipse"><i class="fa fa-check"></i><b>4.4</b> plot the ellipse</a></li>
+<li class="chapter" data-level="4.5" data-path="a4-Rmap02.html"><a href="a4-Rmap02.html#畫地圖"><i class="fa fa-check"></i><b>4.5</b> 畫地圖</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="a5-Cluster-Detection-in-Point-Event-Data.html"><a href="a5-Cluster-Detection-in-Point-Event-Data.html"><i class="fa fa-check"></i><b>5</b> 偵測點事件的空間群聚</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="a5-Cluster-Detection-in-Point-Event-Data.html"><a href="a5-Cluster-Detection-in-Point-Event-Data.html#空間型態檢定概念"><i class="fa fa-check"></i><b>5.1</b> 空間型態檢定概念</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="a5-Cluster-Detection-in-Point-Event-Data.html"><a href="a5-Cluster-Detection-in-Point-Event-Data.html#全域檢定與局部檢定"><i class="fa fa-check"></i><b>5.1.1</b> 全域檢定與局部檢定</a></li>
+<li class="chapter" data-level="5.1.2" data-path="a5-Cluster-Detection-in-Point-Event-Data.html"><a href="a5-Cluster-Detection-in-Point-Event-Data.html#空間型態的統計檢定"><i class="fa fa-check"></i><b>5.1.2</b> 空間型態的統計檢定</a></li>
+<li class="chapter" data-level="5.1.3" data-path="a5-Cluster-Detection-in-Point-Event-Data.html"><a href="a5-Cluster-Detection-in-Point-Event-Data.html#統計分析與視覺化觀察"><i class="fa fa-check"></i><b>5.1.3</b> 統計分析與視覺化觀察</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="a5-Cluster-Detection-in-Point-Event-Data.html"><a href="a5-Cluster-Detection-in-Point-Event-Data.html#空間群聚的全域檢定"><i class="fa fa-check"></i><b>5.2</b> 空間群聚的全域檢定</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="a5-Cluster-Detection-in-Point-Event-Data.html"><a href="a5-Cluster-Detection-in-Point-Event-Data.html#樣方分析quadrat-analysis"><i class="fa fa-check"></i><b>5.2.1</b> 樣方分析(Quadrat analysis)</a></li>
+<li class="chapter" data-level="5.2.2" data-path="a5-Cluster-Detection-in-Point-Event-Data.html"><a href="a5-Cluster-Detection-in-Point-Event-Data.html#最鄰近分析nearest-neighbor-analysis"><i class="fa fa-check"></i><b>5.2.2</b> 最鄰近分析(Nearest neighbor analysis)</a></li>
+<li class="chapter" data-level="5.2.3" data-path="a5-Cluster-Detection-in-Point-Event-Data.html"><a href="a5-Cluster-Detection-in-Point-Event-Data.html#距離函數的分析方式distance-function-analysis"><i class="fa fa-check"></i><b>5.2.3</b> 距離函數的分析方式(Distance function analysis)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="a6-Rmap04.html"><a href="a6-Rmap04.html"><i class="fa fa-check"></i><b>6</b> R 實作</a>
+<ul>
+<li class="chapter" data-level="6.0.1" data-path="a6-Rmap04.html"><a href="a6-Rmap04.html#樣方分析quadrat-analysis-1"><i class="fa fa-check"></i><b>6.0.1</b> 樣方分析(Quadrat analysis)</a></li>
+<li class="chapter" data-level="6.0.2" data-path="a6-Rmap04.html"><a href="a6-Rmap04.html#卡方檢定"><i class="fa fa-check"></i><b>6.0.2</b> 卡方檢定：</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="a7-Hotspots.html"><a href="a7-Hotspots.html"><i class="fa fa-check"></i><b>7</b> 找出點事件的群聚熱區</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="a7-Hotspots.html"><a href="a7-Hotspots.html#找出群聚的目的"><i class="fa fa-check"></i><b>7.1</b> 找出群聚的目的</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="a7-Hotspots.html"><a href="a7-Hotspots.html#群聚熱區的意義"><i class="fa fa-check"></i><b>7.1.1</b> 群聚熱區的意義</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="a7-Hotspots.html"><a href="a7-Hotspots.html#找出熱區的方法"><i class="fa fa-check"></i><b>7.2</b> 找出熱區的方法</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="a7-Hotspots.html"><a href="a7-Hotspots.html#呈現群聚的連續面核密度估計"><i class="fa fa-check"></i><b>7.2.1</b> 呈現群聚的連續面：核密度估計</a></li>
+<li class="chapter" data-level="7.2.2" data-path="a7-Hotspots.html"><a href="a7-Hotspots.html#機器學習的分群演算法dbscan-與-optics"><i class="fa fa-check"></i><b>7.2.2</b> 機器學習的分群演算法：DBSCAN 與 OPTICS</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="a7-Hotspots.html"><a href="a7-Hotspots.html#影響群聚判斷的因素"><i class="fa fa-check"></i><b>7.3</b> 影響群聚判斷的因素</a>
+<ul>
+<li class="chapter" data-level="7.3.1" data-path="a7-Hotspots.html"><a href="a7-Hotspots.html#人口基數分布"><i class="fa fa-check"></i><b>7.3.1</b> 人口基數分布</a></li>
+</ul></li>
+</ul></li>
+<li class="appendix"><span><b>附錄</b></span></li>
+<li class="chapter" data-level="A" data-path="sound.html"><a href="sound.html"><i class="fa fa-check"></i><b>A</b> 附錄01</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>統蕉恅瓬</a></li>
+<li class="divider"></li>
+<li><a href="https://bookdown.org" target="blank">讀書筆記</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">空間統計</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="a4_Rmap02" class="section level1" number="4">
+<h1><span class="header-section-number">第 4 章</span> R 實作 02</h1>
+<div id="台灣旅館數量" class="section level2" number="4.1">
+<h2><span class="header-section-number">4.1</span> 台灣旅館數量</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="a4-Rmap02.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="a4-Rmap02.html#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="a4-Rmap02.html#cb1-3" aria-hidden="true" tabindex="-1"></a>sf_taiwan <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">read_sf</span>(<span class="st">&quot;sf_taiwan</span><span class="sc">\\</span><span class="st">sf_taiwan.shp&quot;</span>)</span>
+<span id="cb1-4"><a href="a4-Rmap02.html#cb1-4" aria-hidden="true" tabindex="-1"></a> sf_taiwan_simplify <span class="ot">&lt;-</span> sf_taiwan <span class="sc">%&gt;%</span></span>
+<span id="cb1-5"><a href="a4-Rmap02.html#cb1-5" aria-hidden="true" tabindex="-1"></a>  rmapshaper<span class="sc">::</span><span class="fu">ms_simplify</span>() <span class="co"># 簡化圖形</span></span>
+<span id="cb1-6"><a href="a4-Rmap02.html#cb1-6" aria-hidden="true" tabindex="-1"></a>sf_hotel <span class="ot">&lt;-</span>sf<span class="sc">::</span><span class="fu">read_sf</span>(<span class="st">&quot;Hotel_E_f</span><span class="sc">\\</span><span class="st">Hotel_E_f.shp&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="a4-Rmap02.html#cb2-1" aria-hidden="true" tabindex="-1"></a>sf_taiwan_simplify <span class="sc">%&gt;%</span> sf<span class="sc">::</span><span class="fu">st_crop</span>(</span>
+<span id="cb2-2"><a href="a4-Rmap02.html#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">xmin=</span><span class="dv">119</span>, <span class="at">xmax=</span><span class="dv">123</span>,</span>
+<span id="cb2-3"><a href="a4-Rmap02.html#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">ymin=</span><span class="dv">21</span>, <span class="at">ymax=</span><span class="dv">26</span></span>
+<span id="cb2-4"><a href="a4-Rmap02.html#cb2-4" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-5"><a href="a4-Rmap02.html#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>()<span class="sc">+</span>  <span class="co"># 第一層是sf_taiwan, 以它的CRS為主</span></span>
+<span id="cb2-6"><a href="a4-Rmap02.html#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>()<span class="sc">+</span></span>
+<span id="cb2-7"><a href="a4-Rmap02.html#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data=</span>sf_hotel, <span class="at">size =</span> <span class="fl">0.1</span>, <span class="at">color=</span> <span class="st">&quot;#8f2e14&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill=</span><span class="st">&#39;#c1e4e9&#39;</span>),                        <span class="at">panel.grid.major=</span><span class="fu">element_line</span>(<span class="at">colour=</span><span class="cn">NA</span>))</span></code></pre></div>
+<pre><code>## Warning: attribute variables are assumed to be spatially constant throughout all
+## geometries</code></pre>
+<p><img src="bookdown_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+</div>
+<div id="中心點" class="section level2" number="4.2">
+<h2><span class="header-section-number">4.2</span> 中心點</h2>
+<p><strong>以台南市為例</strong></p>
+<p>畫圖：</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="a4-Rmap02.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(aspace)</span>
+<span id="cb4-2"><a href="a4-Rmap02.html#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb4-3"><a href="a4-Rmap02.html#cb4-3" aria-hidden="true" tabindex="-1"></a>sf_Tainan <span class="ot">&lt;-</span> sf_taiwan <span class="sc">%&gt;%</span> <span class="fu">subset</span>(COUNTYNAME <span class="sc">==</span> <span class="st">&quot;臺南市&quot;</span>)</span>
+<span id="cb4-4"><a href="a4-Rmap02.html#cb4-4" aria-hidden="true" tabindex="-1"></a>sf_hotel_Tainan <span class="ot">&lt;-</span> (sf_hotel <span class="sc">%&gt;%</span> <span class="fu">subset</span>(Region  <span class="sc">==</span> <span class="st">&quot;Tainan City&quot;</span>))</span>
+<span id="cb4-5"><a href="a4-Rmap02.html#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="a4-Rmap02.html#cb4-6" aria-hidden="true" tabindex="-1"></a>Tainana.hetol.plot <span class="ot">&lt;-</span> </span>
+<span id="cb4-7"><a href="a4-Rmap02.html#cb4-7" aria-hidden="true" tabindex="-1"></a>sf_Tainan <span class="sc">%&gt;%</span> <span class="fu">st_crop</span>(</span>
+<span id="cb4-8"><a href="a4-Rmap02.html#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">xmin=</span><span class="dv">118</span>, <span class="at">xmax=</span><span class="dv">121</span>,</span>
+<span id="cb4-9"><a href="a4-Rmap02.html#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">ymin=</span><span class="dv">22</span>, <span class="at">ymax=</span><span class="dv">24</span></span>
+<span id="cb4-10"><a href="a4-Rmap02.html#cb4-10" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-11"><a href="a4-Rmap02.html#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>()<span class="sc">+</span>  <span class="co"># 第一層是sf_taiwan, 以它的CRS為主</span></span>
+<span id="cb4-12"><a href="a4-Rmap02.html#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>()<span class="sc">+</span></span>
+<span id="cb4-13"><a href="a4-Rmap02.html#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data=</span>sf_hotel_Tainan, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">color=</span> <span class="st">&quot;#7b8d42&quot;</span>, <span class="at">alpha=</span> <span class="fl">0.5</span>) <span class="sc">+</span> </span>
+<span id="cb4-14"><a href="a4-Rmap02.html#cb4-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.background =</span> <span class="fu">element_rect</span>(<span class="at">fill=</span><span class="st">&#39;#c1e4e9&#39;</span>),                        <span class="at">panel.grid.major=</span><span class="fu">element_line</span>(<span class="at">colour=</span><span class="cn">NA</span>))</span>
+<span id="cb4-15"><a href="a4-Rmap02.html#cb4-15" aria-hidden="true" tabindex="-1"></a>Tainana.hetol.plot</span></code></pre></div>
+<p><img src="bookdown_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>整理資料：</p>
+<div id="mean-center" class="section level3" number="4.2.1">
+<h3><span class="header-section-number">4.2.1</span> mean center</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="a4-Rmap02.html#cb5-1" aria-hidden="true" tabindex="-1"></a>mean_c <span class="ot">&lt;-</span> <span class="fu">mean_centre</span>(<span class="at">id=</span><span class="dv">1</span>, <span class="at">filename=</span><span class="st">&quot;sf_hotel_Tainan&quot;</span>, </span>
+<span id="cb5-2"><a href="a4-Rmap02.html#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="at">weighted=</span><span class="cn">FALSE</span>, <span class="at">weights=</span><span class="cn">NULL</span>, <span class="at">points=</span>sf_hotel_Tainan.xy)</span></code></pre></div>
+<pre><code>##   id CENTRE.x CENTRE.y
+## 1  1 120.2448 23.05841</code></pre>
+</div>
+<div id="median-center" class="section level3" number="4.2.2">
+<h3><span class="header-section-number">4.2.2</span> median center</h3>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="a4-Rmap02.html#cb7-1" aria-hidden="true" tabindex="-1"></a>median_c <span class="ot">&lt;-</span> <span class="fu">median_centre</span>(<span class="at">id=</span><span class="dv">1</span>, <span class="at">filename=</span><span class="st">&quot;sf_hotel_Tainan&quot;</span>, </span>
+<span id="cb7-2"><a href="a4-Rmap02.html#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="at">points=</span>sf_hotel_Tainan.xy)</span></code></pre></div>
+<pre><code>##   id median.x median.y
+## 1  1 120.2044 22.99838</code></pre>
+</div>
+<div id="mean-center-1" class="section level3" number="4.2.3">
+<h3><span class="header-section-number">4.2.3</span> mean center</h3>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="a4-Rmap02.html#cb9-1" aria-hidden="true" tabindex="-1"></a>CF <span class="ot">&lt;-</span> <span class="fu">CF</span>(<span class="at">id=</span><span class="dv">1</span>, <span class="at">filename=</span><span class="st">&quot;sf_hotel_Tainan&quot;</span>, <span class="at">points=</span>sf_hotel_Tainan.xy)</span></code></pre></div>
+<pre><code>##   id     CF.x     CF.y
+## 1  1 120.2021 22.99831</code></pre>
+<p>另外還有一個是課本裡沒提到的：
+- <strong>Centre of Minimum Distance</strong></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="a4-Rmap02.html#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CMD(id=1, filename=&quot;sf_hotel_Tainan&quot;, dist=10, </span></span>
+<span id="cb11-2"><a href="a4-Rmap02.html#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># points=sf_hotel_Tainan.xy)</span></span></code></pre></div>
+</div>
+<div id="比較三個中心點" class="section level3" number="4.2.4">
+<h3><span class="header-section-number">4.2.4</span> 比較三個中心點：</h3>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="a4-Rmap02.html#cb12-1" aria-hidden="true" tabindex="-1"></a>Tainana.hetol.plot <span class="sc">+</span><span class="fu">geom_point</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> CF<span class="sc">$</span>CF.x, <span class="at">y =</span> CF<span class="sc">$</span>CF.y), <span class="at">shape =</span> <span class="dv">11</span>, <span class="at">color =</span> <span class="st">&quot;#483c4d&quot;</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>)<span class="sc">+</span></span>
+<span id="cb12-2"><a href="a4-Rmap02.html#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> mean_c<span class="sc">$</span>CENTRE.x, <span class="at">y =</span> mean_c<span class="sc">$</span>CENTRE.y))<span class="sc">+</span></span>
+<span id="cb12-3"><a href="a4-Rmap02.html#cb12-3" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_point</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> median_c<span class="sc">$</span>median.x, <span class="at">y =</span> median_c<span class="sc">$</span>median.y), <span class="at">shape =</span> <span class="dv">1</span>, <span class="at">color =</span> <span class="st">&quot;#420a00&quot;</span>, <span class="at">size =</span> <span class="dv">3</span>, <span class="at">alpha =</span> <span class="fl">0.7</span>)<span class="sc">+</span></span>
+<span id="cb12-4"><a href="a4-Rmap02.html#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> <span class="st">&quot;&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+</div>
+</div>
+<div id="橢圓" class="section level2" number="4.3">
+<h2><span class="header-section-number">4.3</span> 橢圓</h2>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="a4-Rmap02.html#cb13-1" aria-hidden="true" tabindex="-1"></a> <span class="fu">calc_sde</span>(<span class="at">id=</span><span class="dv">1</span>,<span class="at">points=</span>sf_hotel_Tainan.xy)</span></code></pre></div>
+<pre><code>## $id
+## [1] 1
+## 
+## $CALCCENTRE
+## [1] TRUE
+## 
+## $weighted
+## [1] FALSE
+## 
+## $CENTRE.x
+## [1] 120.2448
+## 
+## $CENTRE.y
+## [1] 23.05841
+## 
+## $Sigma.x
+## [1] 0.07563829
+## 
+## $Sigma.y
+## [1] 0.2038352
+## 
+## $Major
+## [1] &quot;SigmaY&quot;
+## 
+## $Minor
+## [1] &quot;SigmaX&quot;
+## 
+## $Theta
+## [1] 38.73579
+## 
+## $Eccentricity
+## [1] 0.9286026
+## 
+## $Area.sde
+## [1] 0.04843626
+## 
+## $TanTheta
+## [1] 0.8021773
+## 
+## $SinTheta
+## [1] 0.6257301
+## 
+## $CosTheta
+## [1] 0.7800396
+## 
+## $SinThetaCosTheta
+## [1] 0.4880943
+## 
+## $Sin2Theta
+## [1] 0.3915381
+## 
+## $Cos2Theta
+## [1] 0.6084619
+## 
+## $ThetaCorr
+## [1] 38.73579</code></pre>
+</div>
+<div id="plot-the-ellipse" class="section level2" number="4.4">
+<h2><span class="header-section-number">4.4</span> plot the ellipse</h2>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="a4-Rmap02.html#cb15-1" aria-hidden="true" tabindex="-1"></a>rotation <span class="ot">=</span> <span class="cf">function</span>(a){</span>
+<span id="cb15-2"><a href="a4-Rmap02.html#cb15-2" aria-hidden="true" tabindex="-1"></a>  r <span class="ot">=</span> a <span class="sc">*</span> pi <span class="sc">/</span> <span class="dv">180</span> <span class="co">#degrees to radians</span></span>
+<span id="cb15-3"><a href="a4-Rmap02.html#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">matrix</span>(<span class="fu">c</span>(<span class="fu">cos</span>(r), <span class="fu">sin</span>(r), <span class="sc">-</span><span class="fu">sin</span>(r), <span class="fu">cos</span>(r)), <span class="at">nrow =</span> <span class="dv">2</span>, <span class="at">ncol =</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span> <span class="fu">return</span>()</span>
+<span id="cb15-4"><a href="a4-Rmap02.html#cb15-4" aria-hidden="true" tabindex="-1"></a>}   <span class="co"># 旋轉矩陣(Rotation matrix)</span></span>
+<span id="cb15-5"><a href="a4-Rmap02.html#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="a4-Rmap02.html#cb15-6" aria-hidden="true" tabindex="-1"></a>CENTRE.x <span class="ot">&lt;-</span> <span class="fu">mean</span>(sf_hotel_Tainan.xy<span class="sc">$</span>Px); CENTRE.y <span class="ot">&lt;-</span> <span class="fu">mean</span>(sf_hotel_Tainan.xy<span class="sc">$</span>Py) <span class="co"># 圓心，就是平均</span></span>
+<span id="cb15-7"><a href="a4-Rmap02.html#cb15-7" aria-hidden="true" tabindex="-1"></a>Sigma.x <span class="ot">=</span> <span class="fl">0.07563829</span>; Sigma.y <span class="ot">=</span> <span class="fl">0.2038352</span> <span class="co"># 半徑</span></span>
+<span id="cb15-8"><a href="a4-Rmap02.html#cb15-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-9"><a href="a4-Rmap02.html#cb15-9" aria-hidden="true" tabindex="-1"></a>theta <span class="ot">&lt;-</span> <span class="fl">38.73579</span><span class="sc">*</span> pi <span class="sc">/</span> <span class="dv">180</span></span>
+<span id="cb15-10"><a href="a4-Rmap02.html#cb15-10" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="fu">rotation</span>(theta)</span>
+<span id="cb15-11"><a href="a4-Rmap02.html#cb15-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-12"><a href="a4-Rmap02.html#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggforce)</span>
+<span id="cb15-13"><a href="a4-Rmap02.html#cb15-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-14"><a href="a4-Rmap02.html#cb15-14" aria-hidden="true" tabindex="-1"></a>Tainana.hetol.plot<span class="sc">+</span></span>
+<span id="cb15-15"><a href="a4-Rmap02.html#cb15-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> CENTRE.x, <span class="at">y =</span> CENTRE.y))<span class="sc">+</span></span>
+<span id="cb15-16"><a href="a4-Rmap02.html#cb15-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> CENTRE.y<span class="sc">-</span>CENTRE.x<span class="sc">*</span><span class="fu">tan</span>(theta), <span class="at">slope =</span> <span class="fu">tan</span>(theta))<span class="sc">+</span></span>
+<span id="cb15-17"><a href="a4-Rmap02.html#cb15-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">intercept =</span> CENTRE.y<span class="sc">+</span>CENTRE.x<span class="sc">*</span>(<span class="fu">tan</span>(theta)), <span class="at">slope =</span> <span class="sc">-</span><span class="fu">tan</span>(theta))<span class="sc">+</span></span>
+<span id="cb15-18"><a href="a4-Rmap02.html#cb15-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ellipse</span>(<span class="fu">aes</span>(<span class="at">x0 =</span> CENTRE.x, <span class="at">y0 =</span> CENTRE.y, <span class="at">a =</span> Sigma.y, <span class="at">b =</span> Sigma.x, <span class="at">angle =</span> theta)) </span></code></pre></div>
+<p><img src="bookdown_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>但是要小心的是，這和進行回歸的點圖很像，要小心離群值（就是離大家很遠的值）會影響方向性的呈現。</p>
+</div>
+<div id="畫地圖" class="section level2" number="4.5">
+<h2><span class="header-section-number">4.5</span> 畫地圖</h2>
+<p>這裡我們用<code>tmap</code>，來畫一下台南的人口分布：</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="a4-Rmap02.html#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(<span class="at">list=</span><span class="fu">ls</span>())</span>
+<span id="cb16-2"><a href="a4-Rmap02.html#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb16-3"><a href="a4-Rmap02.html#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(spData)</span>
+<span id="cb16-4"><a href="a4-Rmap02.html#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="a4-Rmap02.html#cb17-1" aria-hidden="true" tabindex="-1"></a>sf_taiwan_town <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">read_sf</span>(<span class="st">&quot;C:/Users/ChenWenRu/OneDrive - 國立成功大學 National Cheng Kung University/R_Project/Spatial Analysis/mapdata202104280245</span><span class="sc">\\</span><span class="st">TOWN_MOI_1100415.shp&quot;</span>)</span>
+<span id="cb17-2"><a href="a4-Rmap02.html#cb17-2" aria-hidden="true" tabindex="-1"></a>sf_tainan_pop <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Tainan_pop.csv&quot;</span>, <span class="at">fileEncoding =</span> <span class="st">&quot;Big5&quot;</span>)</span>
+<span id="cb17-3"><a href="a4-Rmap02.html#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(sf_tainan_pop) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;TOWNNAME&quot;</span>, <span class="st">&quot;population&quot;</span>,<span class="st">&quot;male_pop&quot;</span>,<span class="st">&quot;female_pop&quot;</span> )</span>
+<span id="cb17-4"><a href="a4-Rmap02.html#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="a4-Rmap02.html#cb17-5" aria-hidden="true" tabindex="-1"></a>sf_Tainan_town <span class="ot">&lt;-</span> sf_taiwan_town <span class="sc">%&gt;%</span> <span class="fu">filter</span>(COUNTYNAME <span class="sc">==</span> <span class="st">&quot;臺南市&quot;</span>)</span>
+<span id="cb17-6"><a href="a4-Rmap02.html#cb17-6" aria-hidden="true" tabindex="-1"></a>sf_Tainan_town <span class="ot">&lt;-</span> <span class="fu">left_join</span>(sf_Tainan_town,sf_tainan_pop[,<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)])</span>
+<span id="cb17-7"><a href="a4-Rmap02.html#cb17-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-8"><a href="a4-Rmap02.html#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 讀旅館資料</span></span>
+<span id="cb17-9"><a href="a4-Rmap02.html#cb17-9" aria-hidden="true" tabindex="-1"></a>sf_hotel <span class="ot">&lt;-</span>sf<span class="sc">::</span><span class="fu">read_sf</span>(<span class="st">&quot;C:/Users/ChenWenRu/OneDrive - 國立成功大學 National Cheng Kung University/R_Project/Spatial Analysis/Hotel_E_f</span><span class="sc">\\</span><span class="st">Hotel_E_f.shp&quot;</span>)</span>
+<span id="cb17-10"><a href="a4-Rmap02.html#cb17-10" aria-hidden="true" tabindex="-1"></a>sf_hotel_Tainan <span class="ot">&lt;-</span> (sf_hotel <span class="sc">%&gt;%</span> <span class="fu">subset</span>(Region  <span class="sc">==</span> <span class="st">&quot;Tainan City&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="a4-Rmap02.html#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tmap)</span>
+<span id="cb18-2"><a href="a4-Rmap02.html#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="a4-Rmap02.html#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(sf_Tainan_town) <span class="sc">+</span> <span class="fu">tm_polygons</span>(<span class="at">col=</span><span class="st">&quot;population&quot;</span>, <span class="at">n =</span> <span class="dv">10</span>, <span class="at">border.col =</span> <span class="st">&quot;white&quot;</span>, <span class="at">palette =</span> <span class="st">&quot;Greens&quot;</span>)<span class="sc">+</span> <span class="co"># n: 幾個級距 ; 可在裡面加上 breaks = c(0, 23000, 27000, 100000 ) 照裡面的數字分級</span></span>
+<span id="cb18-4"><a href="a4-Rmap02.html#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_legend</span>(<span class="at">outside =</span> <span class="cn">TRUE</span>) <span class="co">#legend 是否在外面</span></span></code></pre></div>
+<p><img src="bookdown_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="a4-Rmap02.html#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 讀旅館資料</span></span>
+<span id="cb19-2"><a href="a4-Rmap02.html#cb19-2" aria-hidden="true" tabindex="-1"></a>sf_hotel <span class="ot">&lt;-</span>sf<span class="sc">::</span><span class="fu">read_sf</span>(<span class="st">&quot;Hotel_E_f</span><span class="sc">\\</span><span class="st">Hotel_E_f.shp&quot;</span>)</span>
+<span id="cb19-3"><a href="a4-Rmap02.html#cb19-3" aria-hidden="true" tabindex="-1"></a>sf_hotel_Tainan <span class="ot">&lt;-</span> (sf_hotel <span class="sc">%&gt;%</span> <span class="fu">subset</span>(Region  <span class="sc">==</span> <span class="st">&quot;Tainan City&quot;</span>))</span>
+<span id="cb19-4"><a href="a4-Rmap02.html#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="a4-Rmap02.html#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="fu">tm_shape</span>(sf_Tainan_town) <span class="sc">+</span> <span class="fu">tm_polygons</span>(<span class="at">col=</span><span class="st">&quot;population&quot;</span>, <span class="at">n =</span> <span class="dv">10</span>, <span class="at">border.col =</span> <span class="st">&quot;white&quot;</span>, <span class="at">palette =</span> <span class="st">&quot;Greens&quot;</span>,<span class="at">legend.hist =</span> <span class="cn">TRUE</span>)<span class="sc">+</span> <span class="co"># n: 幾個級距 ; 可在裡面加上 breaks = c(0, 23000, 27000, 100000 ) 照裡面的數字分級; legend.hist 長條圖</span></span>
+<span id="cb19-6"><a href="a4-Rmap02.html#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_legend</span>(<span class="at">outside =</span> <span class="cn">TRUE</span>)<span class="sc">+</span> <span class="co">#legend 是否在外面</span></span>
+<span id="cb19-7"><a href="a4-Rmap02.html#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tm_shape</span>(sf_hotel_Tainan) <span class="sc">+</span> <span class="co"># 加上旅館個數的點點   </span></span>
+<span id="cb19-8"><a href="a4-Rmap02.html#cb19-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tm_dots</span>(<span class="at">size=</span>  .<span class="dv">1</span>, <span class="at">col =</span><span class="st">&quot;black&quot;</span>) </span></code></pre></div>
+<p><img src="bookdown_files/figure-html/unnamed-chunk-12-1.png" width="672" />
+人口與旅館數量的地圖</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="a4-Rmap02.html#cb20-1" aria-hidden="true" tabindex="-1"></a>sf_taiwan_town <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">read_sf</span>(<span class="st">&quot;Taiwan_Town</span><span class="sc">\\</span><span class="st">TOWN_MOI_1100415.shp&quot;</span>)</span>
+<span id="cb20-2"><a href="a4-Rmap02.html#cb20-2" aria-hidden="true" tabindex="-1"></a>sf_tainan_pop <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Tainan_pop.csv&quot;</span>, <span class="at">fileEncoding =</span> <span class="st">&quot;Big5&quot;</span>)</span>
+<span id="cb20-3"><a href="a4-Rmap02.html#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(sf_tainan_pop) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;TOWNNAME&quot;</span>, <span class="st">&quot;population&quot;</span>,<span class="st">&quot;male_pop&quot;</span>,<span class="st">&quot;female_pop&quot;</span> )</span>
+<span id="cb20-4"><a href="a4-Rmap02.html#cb20-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="a4-Rmap02.html#cb20-5" aria-hidden="true" tabindex="-1"></a>sf_Tainan_town <span class="ot">&lt;-</span> sf_taiwan_town <span class="sc">%&gt;%</span> <span class="fu">filter</span>(COUNTYNAME <span class="sc">==</span> <span class="st">&quot;臺南市&quot;</span>)</span>
+<span id="cb20-6"><a href="a4-Rmap02.html#cb20-6" aria-hidden="true" tabindex="-1"></a>sf_Tainan_town <span class="ot">&lt;-</span> <span class="fu">left_join</span>(sf_Tainan_town,sf_tainan_pop[,<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)])</span>
+<span id="cb20-7"><a href="a4-Rmap02.html#cb20-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-8"><a href="a4-Rmap02.html#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 讀旅館資料</span></span>
+<span id="cb20-9"><a href="a4-Rmap02.html#cb20-9" aria-hidden="true" tabindex="-1"></a>sf_hotel <span class="ot">&lt;-</span>sf<span class="sc">::</span><span class="fu">read_sf</span>(<span class="st">&quot;Hotel_E_f</span><span class="sc">\\</span><span class="st">Hotel_E_f.shp&quot;</span>)</span>
+<span id="cb20-10"><a href="a4-Rmap02.html#cb20-10" aria-hidden="true" tabindex="-1"></a>sf_hotel_Tainan <span class="ot">&lt;-</span> (sf_hotel <span class="sc">%&gt;%</span> <span class="fu">subset</span>(Region  <span class="sc">==</span> <span class="st">&quot;Tainan City&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="a4-Rmap02.html#cb21-1" aria-hidden="true" tabindex="-1"></a>sf_taiwan_town <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">read_sf</span>(<span class="st">&quot;Taiwan_Town</span><span class="sc">\\</span><span class="st">TOWN_MOI_1100415.shp&quot;</span>)</span>
+<span id="cb21-2"><a href="a4-Rmap02.html#cb21-2" aria-hidden="true" tabindex="-1"></a>sf_tainan_pop <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Tainan_pop.csv&quot;</span>, <span class="at">fileEncoding =</span> <span class="st">&quot;Big5&quot;</span>)</span>
+<span id="cb21-3"><a href="a4-Rmap02.html#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(sf_tainan_pop) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;TOWNNAME&quot;</span>, <span class="st">&quot;population&quot;</span>,<span class="st">&quot;male_pop&quot;</span>,<span class="st">&quot;female_pop&quot;</span> )</span>
+<span id="cb21-4"><a href="a4-Rmap02.html#cb21-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-5"><a href="a4-Rmap02.html#cb21-5" aria-hidden="true" tabindex="-1"></a>sf_Tainan_town <span class="ot">&lt;-</span> sf_taiwan_town <span class="sc">%&gt;%</span> <span class="fu">filter</span>(COUNTYNAME <span class="sc">==</span> <span class="st">&quot;臺南市&quot;</span>)</span>
+<span id="cb21-6"><a href="a4-Rmap02.html#cb21-6" aria-hidden="true" tabindex="-1"></a>sf_Tainan_town <span class="ot">&lt;-</span> <span class="fu">left_join</span>(sf_Tainan_town,sf_tainan_pop[,<span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)])</span>
+<span id="cb21-7"><a href="a4-Rmap02.html#cb21-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-8"><a href="a4-Rmap02.html#cb21-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 讀旅館資料</span></span>
+<span id="cb21-9"><a href="a4-Rmap02.html#cb21-9" aria-hidden="true" tabindex="-1"></a>sf_hotel <span class="ot">&lt;-</span>sf<span class="sc">::</span><span class="fu">read_sf</span>(<span class="st">&quot;Hotel_E_f</span><span class="sc">\\</span><span class="st">Hotel_E_f.shp&quot;</span>)</span>
+<span id="cb21-10"><a href="a4-Rmap02.html#cb21-10" aria-hidden="true" tabindex="-1"></a>sf_hotel_Tainan <span class="ot">&lt;-</span> (sf_hotel <span class="sc">%&gt;%</span> <span class="fu">subset</span>(Region  <span class="sc">==</span> <span class="st">&quot;Tainan City&quot;</span>))</span></code></pre></div>
+<p>資料來源：</p>
+<p><a href="https://data.gov.tw/dataset/73280" class="uri">https://data.gov.tw/dataset/73280</a></p>
+<p><a href="https://rstudio-pubs-static.s3.amazonaws.com/202534_2c5edc19016247ac9ecfc5713b4604f2.html" class="uri">https://rstudio-pubs-static.s3.amazonaws.com/202534_2c5edc19016247ac9ecfc5713b4604f2.html</a></p>
+<p>人口資料：
+<a href="https://bca.tainan.gov.tw/News_Content.aspx?n=1134&amp;s=8157" class="uri">https://bca.tainan.gov.tw/News_Content.aspx?n=1134&amp;s=8157</a></p>
+<p><a href="http://spatstat.org/ECAS2019/notes/notes03.html" class="uri">http://spatstat.org/ECAS2019/notes/notes03.html</a></p>
+<p>Point pattern analysis in R
+<a href="https://mgimond.github.io/Spatial/point-pattern-analysis-in-r.html" class="uri">https://mgimond.github.io/Spatial/point-pattern-analysis-in-r.html</a></p>
+<p>資料來源：</p>
+<p><a href="https://data.gov.tw/dataset/73280" class="uri">https://data.gov.tw/dataset/73280</a></p>
+<p><a href="https://rstudio-pubs-static.s3.amazonaws.com/202534_2c5edc19016247ac9ecfc5713b4604f2.html" class="uri">https://rstudio-pubs-static.s3.amazonaws.com/202534_2c5edc19016247ac9ecfc5713b4604f2.html</a></p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="a3-PointEvents.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="a5-Cluster-Detection-in-Point-Event-Data.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/yihui/bookdown-chinese/edit/master/04-Rmap02.Rmd",
+"text": "編輯"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["bookdown.pdf", "bookdown.epub"],
+"toc": {
+"collapse": "none"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

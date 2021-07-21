@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>第 7 章 找出點事件的群聚熱區 | 空間統計</title>
+  <meta name="description" content="就是一點筆記。" />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="第 7 章 找出點事件的群聚熱區 | 空間統計" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="就是一點筆記。" />
+  <meta name="github-repo" content="yihui/bookdown-chinese" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="第 7 章 找出點事件的群聚熱區 | 空間統計" />
+  
+  <meta name="twitter:description" content="就是一點筆記。" />
+  
+
+<meta name="author" content="延畢菸酒生" />
+
+
+<meta name="date" content="2021-07-21" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="a6-Rmap04.html"/>
+<link rel="next" href="sound.html"/>
+<script src="libs/header-attrs-2.9/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+
+
+<link rel="stylesheet" href="css/style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">中文書</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>簡介</a></li>
+<li class="chapter" data-level="" data-path="author.html"><a href="author.html"><i class="fa fa-check"></i>筆記</a></li>
+<li class="chapter" data-level="1" data-path="a1-SpatialThinking.html"><a href="a1-SpatialThinking.html"><i class="fa fa-check"></i><b>1</b> 空間思考</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="a1-SpatialThinking.html"><a href="a1-SpatialThinking.html#實體地理空間"><i class="fa fa-check"></i><b>1.1</b> 實體地理空間</a>
+<ul>
+<li class="chapter" data-level="1.1.1" data-path="a1-SpatialThinking.html"><a href="a1-SpatialThinking.html#地理資料模型"><i class="fa fa-check"></i><b>1.1.1</b> 地理資料模型</a></li>
+<li class="chapter" data-level="1.1.2" data-path="a1-SpatialThinking.html"><a href="a1-SpatialThinking.html#屬性資料與測量尺度"><i class="fa fa-check"></i><b>1.1.2</b> 屬性資料與測量尺度</a></li>
+</ul></li>
+<li class="chapter" data-level="1.2" data-path="a1-SpatialThinking.html"><a href="a1-SpatialThinking.html#地理空間分析"><i class="fa fa-check"></i><b>1.2</b> 地理空間分析</a>
+<ul>
+<li class="chapter" data-level="1.2.1" data-path="a1-SpatialThinking.html"><a href="a1-SpatialThinking.html#距離"><i class="fa fa-check"></i><b>1.2.1</b> 距離</a></li>
+<li class="chapter" data-level="1.2.2" data-path="a1-SpatialThinking.html"><a href="a1-SpatialThinking.html#鄰近性"><i class="fa fa-check"></i><b>1.2.2</b> 鄰近性</a></li>
+<li class="chapter" data-level="1.2.3" data-path="a1-SpatialThinking.html"><a href="a1-SpatialThinking.html#矩陣"><i class="fa fa-check"></i><b>1.2.3</b> 矩陣</a></li>
+<li class="chapter" data-level="1.2.4" data-path="a1-SpatialThinking.html"><a href="a1-SpatialThinking.html#鄰近多邊形"><i class="fa fa-check"></i><b>1.2.4</b> 鄰近多邊形</a></li>
+<li class="chapter" data-level="1.2.5" data-path="a1-SpatialThinking.html"><a href="a1-SpatialThinking.html#空間交互作用spatial-interaction"><i class="fa fa-check"></i><b>1.2.5</b> 空間交互作用(spatial interaction)</a></li>
+<li class="chapter" data-level="1.2.6" data-path="a1-SpatialThinking.html"><a href="a1-SpatialThinking.html#空間自相關spatial-autocorrelation"><i class="fa fa-check"></i><b>1.2.6</b> 空間自相關(spatial autocorrelation)</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="a1-SpatialThinking.html"><a href="a1-SpatialThinking.html#注意空間資料的陷阱"><i class="fa fa-check"></i><b>1.3</b> 注意空間資料的陷阱</a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="a1-SpatialThinking.html"><a href="a1-SpatialThinking.html#地理尺度"><i class="fa fa-check"></i><b>1.3.1</b> 地理尺度</a></li>
+<li class="chapter" data-level="1.3.2" data-path="a1-SpatialThinking.html"><a href="a1-SpatialThinking.html#空間不均與邊緣效應"><i class="fa fa-check"></i><b>1.3.2</b> 空間不均與邊緣效應</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="a2-Rmap01.html"><a href="a2-Rmap01.html"><i class="fa fa-check"></i><b>2</b> R_讀取shp檔+畫地圖</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="a2-Rmap01.html"><a href="a2-Rmap01.html#找中心點st_centroid"><i class="fa fa-check"></i><b>2.1</b> 找中心點：<code>st_centroid()</code></a></li>
+<li class="chapter" data-level="2.2" data-path="a2-Rmap01.html"><a href="a2-Rmap01.html#輸出座標st_coordinates"><i class="fa fa-check"></i><b>2.2</b> 輸出座標：<code>st_coordinates()</code></a></li>
+<li class="chapter" data-level="2.3" data-path="a2-Rmap01.html"><a href="a2-Rmap01.html#簡單的統計地圖"><i class="fa fa-check"></i><b>2.3</b> 簡單的統計地圖</a></li>
+<li class="chapter" data-level="2.4" data-path="a2-Rmap01.html"><a href="a2-Rmap01.html#世界人口變化百分比"><i class="fa fa-check"></i><b>2.4</b> 2021世界人口變化百分比</a></li>
+<li class="chapter" data-level="2.5" data-path="a2-Rmap01.html"><a href="a2-Rmap01.html#擷取一部分地圖"><i class="fa fa-check"></i><b>2.5</b> 擷取一部分地圖</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="a3-PointEvents.html"><a href="a3-PointEvents.html"><i class="fa fa-check"></i><b>3</b> 點事件的空間型態</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="a3-PointEvents.html"><a href="a3-PointEvents.html#空間型態分析之前的準備動作"><i class="fa fa-check"></i><b>3.1</b> 空間型態分析之前的準備動作</a></li>
+<li class="chapter" data-level="3.2" data-path="a3-PointEvents.html"><a href="a3-PointEvents.html#空間分布的中心趨勢"><i class="fa fa-check"></i><b>3.2</b> 空間分布的中心趨勢</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="a3-PointEvents.html"><a href="a3-PointEvents.html#平均中心點"><i class="fa fa-check"></i><b>3.2.1</b> 平均中心點</a></li>
+<li class="chapter" data-level="3.2.2" data-path="a3-PointEvents.html"><a href="a3-PointEvents.html#中位數中心點"><i class="fa fa-check"></i><b>3.2.2</b> 中位數中心點</a></li>
+<li class="chapter" data-level="3.2.3" data-path="a3-PointEvents.html"><a href="a3-PointEvents.html#中心地理物件"><i class="fa fa-check"></i><b>3.2.3</b> 中心地理物件</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="a3-PointEvents.html"><a href="a3-PointEvents.html#空間分布的分散程度"><i class="fa fa-check"></i><b>3.3</b> 空間分布的分散程度</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="a3-PointEvents.html"><a href="a3-PointEvents.html#標準距離"><i class="fa fa-check"></i><b>3.3.1</b> 標準距離</a></li>
+<li class="chapter" data-level="3.3.2" data-path="a3-PointEvents.html"><a href="a3-PointEvents.html#標準差橢圓"><i class="fa fa-check"></i><b>3.3.2</b> 標準差橢圓</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="a4-Rmap02.html"><a href="a4-Rmap02.html"><i class="fa fa-check"></i><b>4</b> R 實作 02</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="a4-Rmap02.html"><a href="a4-Rmap02.html#台灣旅館數量"><i class="fa fa-check"></i><b>4.1</b> 台灣旅館數量</a></li>
+<li class="chapter" data-level="4.2" data-path="a4-Rmap02.html"><a href="a4-Rmap02.html#中心點"><i class="fa fa-check"></i><b>4.2</b> 中心點</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="a4-Rmap02.html"><a href="a4-Rmap02.html#mean-center"><i class="fa fa-check"></i><b>4.2.1</b> mean center</a></li>
+<li class="chapter" data-level="4.2.2" data-path="a4-Rmap02.html"><a href="a4-Rmap02.html#median-center"><i class="fa fa-check"></i><b>4.2.2</b> median center</a></li>
+<li class="chapter" data-level="4.2.3" data-path="a4-Rmap02.html"><a href="a4-Rmap02.html#mean-center-1"><i class="fa fa-check"></i><b>4.2.3</b> mean center</a></li>
+<li class="chapter" data-level="4.2.4" data-path="a4-Rmap02.html"><a href="a4-Rmap02.html#比較三個中心點"><i class="fa fa-check"></i><b>4.2.4</b> 比較三個中心點：</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="a4-Rmap02.html"><a href="a4-Rmap02.html#橢圓"><i class="fa fa-check"></i><b>4.3</b> 橢圓</a></li>
+<li class="chapter" data-level="4.4" data-path="a4-Rmap02.html"><a href="a4-Rmap02.html#plot-the-ellipse"><i class="fa fa-check"></i><b>4.4</b> plot the ellipse</a></li>
+<li class="chapter" data-level="4.5" data-path="a4-Rmap02.html"><a href="a4-Rmap02.html#畫地圖"><i class="fa fa-check"></i><b>4.5</b> 畫地圖</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="a5-Cluster-Detection-in-Point-Event-Data.html"><a href="a5-Cluster-Detection-in-Point-Event-Data.html"><i class="fa fa-check"></i><b>5</b> 偵測點事件的空間群聚</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="a5-Cluster-Detection-in-Point-Event-Data.html"><a href="a5-Cluster-Detection-in-Point-Event-Data.html#空間型態檢定概念"><i class="fa fa-check"></i><b>5.1</b> 空間型態檢定概念</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="a5-Cluster-Detection-in-Point-Event-Data.html"><a href="a5-Cluster-Detection-in-Point-Event-Data.html#全域檢定與局部檢定"><i class="fa fa-check"></i><b>5.1.1</b> 全域檢定與局部檢定</a></li>
+<li class="chapter" data-level="5.1.2" data-path="a5-Cluster-Detection-in-Point-Event-Data.html"><a href="a5-Cluster-Detection-in-Point-Event-Data.html#空間型態的統計檢定"><i class="fa fa-check"></i><b>5.1.2</b> 空間型態的統計檢定</a></li>
+<li class="chapter" data-level="5.1.3" data-path="a5-Cluster-Detection-in-Point-Event-Data.html"><a href="a5-Cluster-Detection-in-Point-Event-Data.html#統計分析與視覺化觀察"><i class="fa fa-check"></i><b>5.1.3</b> 統計分析與視覺化觀察</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="a5-Cluster-Detection-in-Point-Event-Data.html"><a href="a5-Cluster-Detection-in-Point-Event-Data.html#空間群聚的全域檢定"><i class="fa fa-check"></i><b>5.2</b> 空間群聚的全域檢定</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="a5-Cluster-Detection-in-Point-Event-Data.html"><a href="a5-Cluster-Detection-in-Point-Event-Data.html#樣方分析quadrat-analysis"><i class="fa fa-check"></i><b>5.2.1</b> 樣方分析(Quadrat analysis)</a></li>
+<li class="chapter" data-level="5.2.2" data-path="a5-Cluster-Detection-in-Point-Event-Data.html"><a href="a5-Cluster-Detection-in-Point-Event-Data.html#最鄰近分析nearest-neighbor-analysis"><i class="fa fa-check"></i><b>5.2.2</b> 最鄰近分析(Nearest neighbor analysis)</a></li>
+<li class="chapter" data-level="5.2.3" data-path="a5-Cluster-Detection-in-Point-Event-Data.html"><a href="a5-Cluster-Detection-in-Point-Event-Data.html#距離函數的分析方式distance-function-analysis"><i class="fa fa-check"></i><b>5.2.3</b> 距離函數的分析方式(Distance function analysis)</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="a6-Rmap04.html"><a href="a6-Rmap04.html"><i class="fa fa-check"></i><b>6</b> R 實作</a>
+<ul>
+<li class="chapter" data-level="6.0.1" data-path="a6-Rmap04.html"><a href="a6-Rmap04.html#樣方分析quadrat-analysis-1"><i class="fa fa-check"></i><b>6.0.1</b> 樣方分析(Quadrat analysis)</a></li>
+<li class="chapter" data-level="6.0.2" data-path="a6-Rmap04.html"><a href="a6-Rmap04.html#卡方檢定"><i class="fa fa-check"></i><b>6.0.2</b> 卡方檢定：</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="a7-Hotspots.html"><a href="a7-Hotspots.html"><i class="fa fa-check"></i><b>7</b> 找出點事件的群聚熱區</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="a7-Hotspots.html"><a href="a7-Hotspots.html#找出群聚的目的"><i class="fa fa-check"></i><b>7.1</b> 找出群聚的目的</a>
+<ul>
+<li class="chapter" data-level="7.1.1" data-path="a7-Hotspots.html"><a href="a7-Hotspots.html#群聚熱區的意義"><i class="fa fa-check"></i><b>7.1.1</b> 群聚熱區的意義</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="a7-Hotspots.html"><a href="a7-Hotspots.html#找出熱區的方法"><i class="fa fa-check"></i><b>7.2</b> 找出熱區的方法</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="a7-Hotspots.html"><a href="a7-Hotspots.html#呈現群聚的連續面核密度估計"><i class="fa fa-check"></i><b>7.2.1</b> 呈現群聚的連續面：核密度估計</a></li>
+<li class="chapter" data-level="7.2.2" data-path="a7-Hotspots.html"><a href="a7-Hotspots.html#機器學習的分群演算法dbscan-與-optics"><i class="fa fa-check"></i><b>7.2.2</b> 機器學習的分群演算法：DBSCAN 與 OPTICS</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="a7-Hotspots.html"><a href="a7-Hotspots.html#影響群聚判斷的因素"><i class="fa fa-check"></i><b>7.3</b> 影響群聚判斷的因素</a>
+<ul>
+<li class="chapter" data-level="7.3.1" data-path="a7-Hotspots.html"><a href="a7-Hotspots.html#人口基數分布"><i class="fa fa-check"></i><b>7.3.1</b> 人口基數分布</a></li>
+</ul></li>
+</ul></li>
+<li class="appendix"><span><b>附錄</b></span></li>
+<li class="chapter" data-level="A" data-path="sound.html"><a href="sound.html"><i class="fa fa-check"></i><b>A</b> 附錄01</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>統蕉恅瓬</a></li>
+<li class="divider"></li>
+<li><a href="https://bookdown.org" target="blank">讀書筆記</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">空間統計</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="a7_Hotspots" class="section level1" number="7">
+<h1><span class="header-section-number">第 7 章</span> 找出點事件的群聚熱區</h1>
+<div id="找出群聚的目的" class="section level2" number="7.1">
+<h2><span class="header-section-number">7.1</span> 找出群聚的目的</h2>
+<div id="群聚熱區的意義" class="section level3" number="7.1.1">
+<h3><span class="header-section-number">7.1.1</span> 群聚熱區的意義</h3>
+<p>尋找估傳的點事件的異常情況，以及與環境的交互反應，並可進一步找出早成群聚的原因。</p>
+</div>
+</div>
+<div id="找出熱區的方法" class="section level2" number="7.2">
+<h2><span class="header-section-number">7.2</span> 找出熱區的方法</h2>
+<div id="呈現群聚的連續面核密度估計" class="section level3" number="7.2.1">
+<h3><span class="header-section-number">7.2.1</span> 呈現群聚的連續面：核密度估計</h3>
+<ul>
+<li><strong>核密度估計的計算方式（kernel density estimation, KDE）</strong> <br/>
+<br/></li>
+</ul>
+<ol style="list-style-type: decimal">
+<li>將研究區分成很多面積相等的小方格<br/>
+<br/></li>
+<li>以其中一個小方格當圓，以r為半徑畫圓<br/>
+<br/></li>
+<li>計算圓裡面的點事件個數，以此可以算出密度<br/>
+<br/>
+算式：
+<br/>
+<span class="math display">\[
+\hat{\lambda}_p = \frac{number \  of \ [S \in C(p,r)]}{\pi r^2}
+\]</span></li>
+</ol>
+<ul>
+<li><span class="math inline">\(C(p,r)\)</span> 表示以小方格為圓心後所畫的圓<br/>
+<br/></li>
+</ul>
+<p>將所有網格都計算完畢，就可以得到一個<strong>群聚趨勢</strong>的連續面，使用核密度估計（kernel density estimation）產生的是<strong>場域資料</strong>（field），也就是<strong>網格資料</strong>（raster data），也就是說，核密度估計（kernel density estimation）可將離散資料轉換為連續資料。</p>
+<ul>
+<li><strong>核密度估計的權重參數</strong><br/>
+<br/></li>
+<li>為了更加細緻的處理距離遞減的效應，會在距離圓心越遠的點事件進行權重的分配與加總，讓趨勢更加平滑，公式如下：</li>
+</ul>
+<p><span class="math display">\[
+f(x,y) = \frac{1}{nh^2}\sum^{n}_{i = 1}k\frac{di}{h}
+\]</span>
+- <span class="math inline">\(f(x,y)\)</span> 為該網格的密度估計值；<br/>
+- <span class="math inline">\(n\)</span> 為原點內事件的個數；<br/>
+- <span class="math inline">\(h\)</span> 為帶寬；<br/>
+- <span class="math inline">\(di\)</span> 為計算事件<span class="math inline">\(i\)</span>到該網格之間的距離；<br/>
+- <span class="math inline">\(k(\frac{di}{h})\)</span> 為以<span class="math inline">\(\frac{di}{h}\)</span> 為變數的核密度的權重函數，為非遞增函數，表示距離越遠值越小<br/></p>
+</div>
+<div id="機器學習的分群演算法dbscan-與-optics" class="section level3" number="7.2.2">
+<h3><span class="header-section-number">7.2.2</span> 機器學習的分群演算法：DBSCAN 與 OPTICS</h3>
+<div id="dbscandensity-based-spatial-clustering-of-applications-with-noise" class="section level4" number="7.2.2.1">
+<h4><span class="header-section-number">7.2.2.1</span> DBSCAN（Density-based spatial clustering of applications with noise）</h4>
+<ul>
+<li>需要事先設定<strong>2</strong>個參數：<br/>
+<ul>
+<li>(1)<span class="math inline">\(\epsilon\)</span> ：點事件的搜尋半徑；<br/></li>
+<li>(2)minPts：每個群最少應該要包含的點數量。<br/>
+<br/></li>
+</ul></li>
+<li>核心操作理念：<br/>
+<br/>
+<ul>
+<li><ol style="list-style-type: decimal">
+<li>隨機找一個點當圓心，以<span class="math inline">\(\epsilon\)</span> 為半徑畫一個圓當搜尋範圍，並計算圓裡面的點事件個數。<br/></li>
+</ol></li>
+<li><ol start="2" style="list-style-type: decimal">
+<li>點事件數量若大於 minPts 被選定的點就是<strong>核心點</strong>，反之就暫時被當成<strong>雜訊點</strong><br/></li>
+</ol></li>
+<li><ol start="3" style="list-style-type: decimal">
+<li>若為核心點，選擇與該點有<strong>直接連結</strong>（directly density connected）的點重複步驟(1)、(2)。<br/></li>
+</ol></li>
+<li><ol start="4" style="list-style-type: decimal">
+<li>若暫定為雜訊點，則再隨機選擇其他點重複步驟(1)(2)。<br/></li>
+</ol></li>
+<li><ol start="5" style="list-style-type: decimal">
+<li>經過 (1)、(2) 這兩步的點，就是<strong>被走訪</strong> (visted) 過。<br/>
+<br/>
+＊直接連結（directly density connected）：兩點互相落在彼此的搜尋圈內，兩點的關係就是直接連結。<br/>
+＊間接連結（density connected）：兩點沒有落在彼此的搜尋圈內，但是可以透過其他的點連接。<br/></li>
+</ol></li>
+</ul></li>
+<li>對所有的點進行以上都被走訪過後，可以將點分為以下三種：<br/>
+<ul>
+<li><ol style="list-style-type: decimal">
+<li><strong>核心點</strong>（core point）：該點的搜尋範圍內有 minPts 以上的點數量。<br/></li>
+</ol></li>
+<li><ol start="2" style="list-style-type: decimal">
+<li><strong>邊緣點</strong>（border point）：該點的搜尋範圍內點數量少於 minPts，但是該點有被包含在其他核心點的範圍內。<br/></li>
+</ol></li>
+<li><ol start="3" style="list-style-type: decimal">
+<li><strong>雜訊點</strong>（Noise）：該點的搜尋範圍內點數量少於 minPts，也不被其他核心點包含。<br/></li>
+</ol></li>
+</ul></li>
+</ul>
+<p><img src="fig/Ch06/DBSCAN_01.jpg" width="90%" /></p>
+<p>圖片來源：<a href="http://123android.blogspot.com/2012/01/28dec11-data-mining.html" class="uri">http://123android.blogspot.com/2012/01/28dec11-data-mining.html</a> <br/>
+<br/>
+然而，DBSCAN 並不能區分密度的階層性或者是結構性，就只能判定是否為熱點。若想要知道分布的階層性，建議可以使用以下介紹的方法 <strong>OPTICS</strong>。</p>
+</div>
+<div id="opticsordering-points-to-identify-the-clustering-structure" class="section level4" number="7.2.2.2">
+<h4><span class="header-section-number">7.2.2.2</span> OPTICS（Ordering points to identify the clustering structure）</h4>
+<ul>
+<li>一樣需要事先設定<strong>2</strong>個參數：<br/>
+<ul>
+<li>(1)<span class="math inline">\(\epsilon\)</span> ：點事件的搜尋半徑；<br/></li>
+<li>(2)minPts：每個群最少應該要包含的點數量。<br/></li>
+</ul></li>
+</ul>
+<p>OPTICS 是 DBSCAN 的延伸，並新加入<strong>核心距離</strong>（core distance）與<strong>可達距離</strong>（reachability distance ）這兩個概念。
+值得注意的是，OPTICS <strong>無法直接取得分群結果，而是提供有助於判斷群聚結構的資訊</strong>，但只要再使用 DBSCAN 之類的分群方法，就可以找出不同密度的點群聚。</p>
+<ul>
+<li>新加入的概念：<br/>
+<ul>
+<li><strong>核心距離</strong>（core distance；<span class="math inline">\(\epsilon&#39;\)</span>）：任一點為圓心，能夠包含 minPts 個點（包含自己）的最短距離，若<span class="math inline">\(\epsilon&#39;\leq \epsilon\)</span>，則該點為核心點；</li>
+<li><strong>可達距離</strong>（reachability distance ）：(需要核心點才有)核心點至在他搜尋半徑（<span class="math inline">\(\epsilon\)</span>）內尚未走訪過的其他點的直線距離，若核心點與尚未走訪過的點距離小於核心距離（<span class="math inline">\(\epsilon&#39;\)</span>），可達距離為核心距離，若大於核心距離，可達距離就是兩點之間的距離。</li>
+<li><strong>可達分數</strong>（reachability score ）：一個點就會紀錄很多不同的可達距離，演算法會記錄最小的可達距離，稱為可達分數。</li>
+</ul></li>
+</ul>
+<p><img src="fig/Ch06/OPTICS_01.png" width="90%" />
+資料來源：<a href="https://medium.com/ai-academy-taiwan/clustering-method-6-d0c207daced6" class="uri">https://medium.com/ai-academy-taiwan/clustering-method-6-d0c207daced6</a> <br/>
+<br/></p>
+<ul>
+<li>核心操作理念：<br/>
+<br/>
+<ul>
+<li><ol style="list-style-type: decimal">
+<li>判斷是否為核心點，也就是計算核心距離（<span class="math inline">\(\epsilon&#39;\)</span>）；<br/></li>
+</ol></li>
+<li><ol start="2" style="list-style-type: decimal">
+<li>拜訪各個核心點，重複以下三個步驟：<br/></li>
+</ol>
+<ul>
+<li>紀錄可達分數。<br/></li>
+<li>選擇可達距離最短的點當作下一個造訪點。<br/></li>
+<li>若在搜尋範圍內的點都已經造訪過了，就隨機挑選下一個點。<br/>
+<br/>
+以各點的走訪順序為x軸，可達分數為y軸，可畫出如下圖的<strong>可達距離圖</strong>(reachability plot)每一個凹谷都可以被視作一個群聚，辨別方式有三種：<br/></li>
+</ul></li>
+</ul></li>
+<li>用看的；簡而言之就是用看的。<br/></li>
+<li>定標準值；訂定一個可達分數閾值（門檻值）， 該值以下的凹谷為群聚，該值以上的點視為雜訊，此方法類似DBSCAN的概念，就是給一個定值（misPts）判斷。</li>
+<li>斜率變化：必用凹谷前後的斜率變化來看，若斜率越大（越陡），表示群聚現象越明顯，斜率值可自訂，若超過即為群聚。</li>
+</ul>
+<p><img src="fig/Ch06/OPTICS_02.png" width="90%" />
+資料來源：<a href="https://xzz201920.medium.com/optics-d80b41fd042a" class="uri">https://xzz201920.medium.com/optics-d80b41fd042a</a> <br/>
+<br/></p>
+</div>
+</div>
+</div>
+<div id="影響群聚判斷的因素" class="section level2" number="7.3">
+<h2><span class="header-section-number">7.3</span> 影響群聚判斷的因素</h2>
+<div id="人口基數分布" class="section level3" number="7.3.1">
+<h3><span class="header-section-number">7.3.1</span> 人口基數分布</h3>
+<p>熱區表示某個點事件在某一區域有異常頻繁出現的現象，因此也要和其他因素互相比較，例如竊盜案在人口密集的的地方發生的事件量本來就會比較多，若一個地方人口稀少但是竊盜頻傳，才算是<strong>熱區</strong>。</p>
+<p>比較點事件群聚與人口基數有3種方法：<br/>
+- 把人口密度作為底圖，並畫上點事件分布點圖<br/>
+- 可使用檢定方法。<br/>
+- 點事件以空間單元加總，搭配人口基數彙整統計，在計算地理術性的群聚找出群聚。<br/></p>
+<p>DBSCAN： <br/>
+<a href="https://kanchengzxdfgcv.blogspot.com/2017/08/r-dbscan.html" class="uri">https://kanchengzxdfgcv.blogspot.com/2017/08/r-dbscan.html</a> <br/>
+<br/>
+OPTIC： <br/>
+<a href="https://medium.com/ai-academy-taiwan/clustering-method-6-d0c207daced6" class="uri">https://medium.com/ai-academy-taiwan/clustering-method-6-d0c207daced6</a> <br/>
+<a href="https://www.gushiciku.cn/pl/2YO7/zh-tw" class="uri">https://www.gushiciku.cn/pl/2YO7/zh-tw</a> <br/></p>
+
+</div>
+</div>
+</div>
+
+
+
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="a6-Rmap04.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="sound.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": true,
+"facebook": false,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/yihui/bookdown-chinese/edit/master/07-HotSpot.Rmd",
+"text": "編輯"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["bookdown.pdf", "bookdown.epub"],
+"toc": {
+"collapse": "none"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
